@@ -3,8 +3,13 @@
 @section('title', 'Beranda')
 
 @section('content')
+    {{-- Navbar clearance gap matching first section --}}
+    <div class="pt-16 sm:pt-20 lg:pt-24 transition-colors duration-300"
+        :class="darkMode ? 'bg-slate-900' : 'bg-gray-50'">
+    </div>
+
     {{-- Koleksi Buku --}}
-    <section class="py-12 sm:py-16 lg:py-20 bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+    <section class="pb-12 sm:pb-16 lg:pb-20 pt-6 sm:pt-8 md:pt-10 lg:pt-12 bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 sm:mb-14">
                 <span class="text-xs uppercase tracking-widest text-primary-600 font-semibold">Publikasi</span>

@@ -3,9 +3,16 @@
 @section('title', 'Kebijakan Privasi')
 @section('meta_description', 'Kebijakan privasi kami menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi data pribadi Anda.')
 
-@@section('content')
+@section('content')
+{{-- Page wrapper — navbar clearance shares same bg as content --}}
+<div class="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+
+    {{-- Navbar clearance gap --}}
+    <div class="pt-16 sm:pt-20 lg:pt-24"></div>
+
 {{-- Header --}}
-<section class="py-12 sm:py-16 lg:py-20 bg-gray-50 dark:bg-slate-900 transition-colors pt-24 sm:pt-28 md:pt-32 lg:pt-36">
+<section class="pb-12 sm:pb-16 lg:pb-20">
+
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-3xl sm:text-4xl lg:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4">Kebijakan Privasi</h1>
         <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400">Kami berkomitmen melindungi privasi dan data pribadi Anda.</p>
@@ -19,7 +26,7 @@
 
         <h2 class="text-2xl font-serif font-bold text-gray-900 dark:text-white mt-8 mb-4">Kebijakan Privasi</h2>
         <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-            Kebijakan Privasi {{ $siteSettings->get('site_name', 'Binakarya Cendikia') }} (“Kebijakan Privasi”) berlaku untuk penggunaan Platform dan merupakan bagian dari Syarat dan Ketentuan {{ $siteSettings->get('site_name', 'Binakarya Cendikia') }} serta Kebijakan Penggunaan. Dengan menggunakan Platform, Anda menyetujui bahwa informasi yang Anda kirimkan dapat diakses sesuai dengan ketentuan perlindungan data yang berlaku.
+            Kebijakan Privasi {{ $siteSettings->get('site_name', 'Binakarya Cendekia') }} ("Kebijakan Privasi") berlaku untuk penggunaan Platform dan merupakan bagian dari Syarat dan Ketentuan {{ $siteSettings->get('site_name', 'Binakarya Cendekia') }} serta Kebijakan Penggunaan. Dengan menggunakan Platform, Anda menyetujui bahwa informasi yang Anda kirimkan dapat diakses sesuai dengan ketentuan perlindungan data yang berlaku.
         </p>
 
         <h2 class="text-2xl font-serif font-bold text-gray-900 dark:text-white mt-8 mb-4">Siapa kami</h2>
@@ -65,5 +72,5 @@
             @endif
         </div>
     </div>
-</div>
+</div>{{-- end page wrapper --}}
 @endsection

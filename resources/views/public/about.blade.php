@@ -9,8 +9,11 @@ Tentang Kami
 @endsection
 
 @section('content')
+{{-- Navbar clearance gap matching hero background --}}
+<div class="pt-16 sm:pt-20 lg:pt-24 bg-gradient-to-br from-primary-700 via-primary-800 to-slate-900"></div>
+
 {{-- Header Hero - Vision Center Style --}}
-<section class="relative py-20 sm:py-28 lg:py-32 bg-gradient-to-br from-primary-700 via-primary-800 to-slate-900 overflow-hidden pt-6 sm:pt-8 md:pt-10 lg:pt-12">
+<section class="relative pb-20 sm:pb-28 lg:pb-32 bg-gradient-to-br from-primary-700 via-primary-800 to-slate-900 overflow-hidden">
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
         <div class="absolute bottom-0 right-0 w-96 h-96 bg-primary-300 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl"></div>

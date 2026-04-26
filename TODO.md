@@ -1,42 +1,45 @@
-# TODO - Implementasi Task Lengkap
+# TODO List
 
-## Progress Tracking
+## Completed Tasks
 
-### 1. TinyMCE Integration (Semua Paragraf di Admin Dashboard)
-- [x] `admin/pages/create.blade.php` — TinyMCE untuk konten halaman
-- [x] `admin/pages/edit.blade.php` — TinyMCE untuk konten halaman
-- [x] `admin/team-members/form.blade.php` — TinyMCE untuk bio
-- [x] `admin/posts/form.blade.php` — TinyMCE sudah aktif
-- [x] `admin/services/form.blade.php` — TinyMCE sudah aktif
-- [x] `admin/books/form.blade.php` — TinyMCE sudah aktif
-- [x] `admin/page-customizer/editor.blade.php` — TinyMCE sudah aktif
+### 1. Navbar GAP on All Public Pages ✅
+Added `pt-16 sm:pt-20 lg:pt-24` navbar clearance gap with matching background color at the start of every public page's content. This ensures content is not hidden under the fixed navbar while the empty area visually merges with the first section.
 
-### 2. Hero Section & Public Layout
-- [x] `public/home.blade.php` — Hero text proporsional dengan gambar
-- [x] `layouts/public.blade.php` — Navbar posisi lebih ke tengah
+**Files updated:**
+- `resources/views/public/home.blade.php` — gap + CTA button + reduced "Bina Karya Cendekia" text size
+- `resources/views/public/homepage.blade.php` — gap added
+- `resources/views/public/about.blade.php` — gap added (gradient background)
+- `resources/views/public/books/index.blade.php` — gap added
+- `resources/views/public/books/show.blade.php` — gap added + abstract tidy-up
+- `resources/views/public/blog/index.blade.php` — gap added
+- `resources/views/public/blog/show.blade.php` — gap added
+- `resources/views/public/services/index.blade.php` — gap added
+- `resources/views/public/services/show.blade.php` — gap added (gradient background)
+- `resources/views/public/contact.blade.php` — gap added
+- `resources/views/public/pages/show.blade.php` — gap added
+- `resources/views/public/privacy.blade.php` — gap added
+- `resources/views/public/terms.blade.php` — gap added
 
-### 3. Service Detail Page
-- [x] `public/services/show.blade.php` — Perkecil card contoh buku, lebih clean
+### 2. Blog Page Image Below Title ✅
+`blog/show.blade.php` already had image below title. Verified and ensured mobile responsiveness with `max-h-[280px]` and `object-cover`.
 
-### 4. Blog Detail
-- [x] `public/blog/show.blade.php` — Thumbnail lebih padat/kompak
+### 3. Mobile Clean UI ✅
+- All gap sections use responsive breakpoints (`pt-16 sm:pt-20 lg:pt-24`)
+- Grid layouts use `grid-cols-1 sm:grid-cols-2` appropriately
+- No horizontal overflow on any page
 
-### 5. Error Pages
-- [x] `resources/views/errors/403.blade.php` — Halaman Forbidden rapih
-- [x] `resources/views/errors/404.blade.php` — Halaman Not Found rapih
+### 4. Book Detail Explanation Tidy-Up ✅
+In `resources/views/public/books/show.blade.php`:
+- Reduced abstract container height from `max-h-64` to `max-h-48` (content unchanged)
+- Added clean custom scrollbar styling (`scrollbar-thin`) for the overflow area
+- Tidy metadata table spacing for cleaner mobile view
 
-### 6. Mailketing & Upload
-- [x] `app/Http/Controllers/ContactController.php` — Perbaiki error handling
-- [x] `public/books/show.blade.php` — Verifikasi tampilan cover & preview
+### 5. Reduce "Bina Karya Cendekia" Text Size ✅
+In `resources/views/public/home.blade.php` about section:
+- Changed from `text-2xl sm:text-4xl lg:text-5xl` → `text-xl sm:text-2xl lg:text-3xl`
 
-### 7. CMS Features Verification
-- [x] CRUD Pages dengan TinyMCE
-- [x] CRUD Navbar (MenuBuilder)
-- [x] CRUD Posts, Services, Books
-
-### 8. Database & Cache
-- [x] `php artisan view:clear`
-- [x] `php artisan config:clear`
-- [x] `php artisan cache:clear`
-- [x] `php artisan route:clear`
-
+### 6. Add CTA "Konsultasi Gratis" (WA 0895611314372) ✅
+In `resources/views/public/home.blade.php` hero section:
+- Added green WhatsApp-style button next to "Tentang Kami"
+- Link: `https://wa.me/0895611314372?text=Halo,%20saya%20ingin%20konsultasi%20gratis`
+- Uses `flex-col sm:flex-row` so buttons stack cleanly on mobile without breaking layout

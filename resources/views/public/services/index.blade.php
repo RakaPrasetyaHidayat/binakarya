@@ -9,7 +9,14 @@
     $showExcerpt = $siteSettings->get('services_layout_show_excerpt');
 @endphp
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 md:pt-10 lg:pt-12 py-8 sm:py-12 lg:py-16">
+{{-- Page wrapper — navbar clearance shares same bg as content --}}
+<div class="min-h-screen bg-white dark:bg-slate-800 transition-colors duration-300">
+
+    {{-- Navbar clearance gap --}}
+    <div class="pt-16 sm:pt-20 lg:pt-24"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+
     <div class="text-center mb-8 sm:mb-12">
         <span class="text-xs uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400 font-semibold mb-2 block transition-colors">{{ $siteSettings->get('services_header_tagline', 'Layanan Kami') }}</span>
         <h1 class="text-2xl sm:text-4xl lg:text-5xl font-sans font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors">{{ $siteSettings->get('services_header_title', 'Solusi dan Layanan') }}</h1>
@@ -71,5 +78,8 @@
         </div>
     </section>
     @endif
-</div>
+
+    </div>{{-- end inner container --}}
+
+</div>{{-- end page wrapper --}}
 @endsection

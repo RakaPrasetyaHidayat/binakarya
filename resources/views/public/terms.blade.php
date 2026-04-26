@@ -4,8 +4,15 @@
 @section('meta_description', 'Syarat dan ketentuan penggunaan situs web dan layanan Binakarya Cendikia.')
 
 @section('content')
+{{-- Page wrapper — navbar clearance shares same bg as content --}}
+<div class="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+
+    {{-- Navbar clearance gap --}}
+    <div class="pt-16 sm:pt-20 lg:pt-24"></div>
+
 {{-- Header --}}
-<section class="py-12 sm:py-16 lg:py-20 bg-gray-50 dark:bg-slate-900 transition-colors pt-24 sm:pt-28 md:pt-32 lg:pt-36">
+<section class="pb-12 sm:pb-16 lg:pb-20 pt-4 sm:pt-6 lg:pt-8 transition-colors">
+
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-3xl sm:text-4xl lg:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4 transition-colors">Syarat & Ketentuan</h1>
         <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400 transition-colors">Ketentuan penggunaan situs dan layanan kami.</p>
@@ -19,11 +26,11 @@
         
         <h2 class="text-2xl font-serif font-bold text-gray-900 mt-8 mb-4">Pendahuluan</h2>
         <p class="text-gray-600 leading-relaxed">
-            Selamat datang di {{ $siteSettings->get('site_name', 'Binakarya Cendikia') }}! Syarat dan Ketentuan ini mengatur penggunaan layanan bimbingan belajar dan penerbitan kami, termasuk situs web ini dan layanan lain yang kami sediakan. Dengan menggunakan layanan kami, Anda dianggap telah membaca, memahami, dan menyetujui seluruh ketentuan yang tercantum di bawah ini.
+            Selamat datang di {{ $siteSettings->get('site_name', 'Binakarya Cendekia') }}! Syarat dan Ketentuan ini mengatur penggunaan layanan bimbingan belajar dan penerbitan kami, termasuk situs web ini dan layanan lain yang kami sediakan. Dengan menggunakan layanan kami, Anda dianggap telah membaca, memahami, dan menyetujui seluruh ketentuan yang tercantum di bawah ini.
         </p>
         
         <h2 class="text-2xl font-serif font-bold text-gray-900 mt-8 mb-4">Layanan yang Disediakan</h2>
-        <p class="text-gray-600 leading-relaxed mb-4">{{ $siteSettings->get('site_name', 'Binakarya Cendikia') }} menyediakan layanan bimbingan belajar baik secara online & offline serta layanan penerbitan buku ilmiah. Program meliputi:</p>
+        <p class="text-gray-600 leading-relaxed mb-4">{{ $siteSettings->get('site_name', 'Binakarya Cendekia') }} menyediakan layanan bimbingan belajar baik secara online & offline serta layanan penerbitan buku ilmiah. Program meliputi:</p>
         <ul class="space-y-3 text-gray-600 list-disc pl-5">
             <li>Bimbingan Belajar & Pelatihan Akademik</li>
             <li>Penerbitan Buku & Karya Ilmiah</li>
@@ -41,30 +48,30 @@
         <h2 class="text-2xl font-serif font-bold text-gray-900 mt-8 mb-4">Pembayaran</h2>
         <ul class="space-y-3 text-gray-600 list-disc pl-5">
             <li>Semua pembayaran untuk layanan dilakukan melalui metode pembayaran yang disediakan di platform kami.</li>
-            <li>Biaya pendaftaran dan biaya program yang telah dibayarkan tidak dapat dikembalikan kecuali dalam kondisi tertentu yang disetujui oleh pihak {{ $siteSettings->get('site_name', 'Binakarya Cendikia') }}.</li>
+            <li>Biaya pendaftaran dan biaya program yang telah dibayarkan tidak dapat dikembalikan kecuali dalam kondisi tertentu yang disetujui oleh pihak {{ $siteSettings->get('site_name', 'Binakarya Cendekia') }}.</li>
             <li>Promo dan diskon hanya berlaku sesuai syarat dan ketentuan masing-masing promosi.</li>
         </ul>
         
         <h2 class="text-2xl font-serif font-bold text-gray-900 mt-8 mb-4">Kebijakan Pembatalan</h2>
         <ul class="space-y-3 text-gray-600 list-disc pl-5">
-            <li>Pembatalan harus diinformasikan kepada pihak {{ $siteSettings->get('site_name', 'Binakarya Cendikia') }}.</li>
+            <li>Pembatalan harus diinformasikan kepada pihak {{ $siteSettings->get('site_name', 'Binakarya Cendekia') }}.</li>
             <li>Pembatalan yang dilakukan setelah kelas dimulai atau proses penerbitan berjalan tidak akan mendapatkan pengembalian dana.</li>
         </ul>
         
         <h2 class="text-2xl font-serif font-bold text-gray-900 mt-8 mb-4">Hak dan Kewajiban Pengguna</h2>
         <ul class="space-y-3 text-gray-600 list-disc pl-5">
             <li>Pengguna wajib menjaga perilaku yang baik selama mengikuti kelas atau proses layanan.</li>
-            <li>Pengguna tidak diperkenankan menyebarluaskan materi pembelajaran atau draf karya tanpa izin tertulis dari {{ $siteSettings->get('site_name', 'Binakarya Cendikia') }}.</li>
+            <li>Pengguna tidak diperkenankan menyebarluaskan materi pembelajaran atau draf karya tanpa izin tertulis dari {{ $siteSettings->get('site_name', 'Binakarya Cendekia') }}.</li>
             <li>Pelanggaran terhadap aturan dapat menyebabkan penangguhan atau penghentian layanan tanpa pengembalian dana.</li>
         </ul>
         
         <h2 class="text-2xl font-serif font-bold text-gray-900 mt-8 mb-4">Penyesuaian Layanan</h2>
         <p class="text-gray-600 leading-relaxed">
-            {{ $siteSettings->get('site_name', 'Binakarya Cendikia') }} berhak mengubah jadwal kelas, metode pengajaran, atau pengajar sesuai dengan kebutuhan operasional, dengan pemberitahuan sebelumnya kepada pengguna.
+            {{ $siteSettings->get('site_name', 'Binakarya Cendekia') }} berhak mengubah jadwal kelas, metode pengajaran, atau pengajar sesuai dengan kebutuhan operasional, dengan pemberitahuan sebelumnya kepada pengguna.
         </p>
         
         <h2 class="text-2xl font-serif font-bold text-gray-900 mt-8 mb-4">Batasan Tanggung Jawab</h2>
-        <p class="text-gray-600 leading-relaxed mb-4">{{ $siteSettings->get('site_name', 'Binakarya Cendikia') }} tidak bertanggung jawab atas kerugian yang timbul akibat:</p>
+        <p class="text-gray-600 leading-relaxed mb-4">{{ $siteSettings->get('site_name', 'Binakarya Cendekia') }} tidak bertanggung jawab atas kerugian yang timbul akibat:</p>
         <ul class="space-y-3 text-gray-600 list-disc pl-5">
             <li>Gangguan teknis di luar kendali kami.</li>
             <li>Penyalahgunaan akun oleh pihak lain.</li>
@@ -89,5 +96,5 @@
             @endif
         </div>
     </div>
-</div>
+</div>{{-- end page wrapper --}}
 @endsection

@@ -3,9 +3,14 @@
 @section('title', 'Blog')
 
 @section('content')
-    <div class="bg-white dark:bg-slate-900 min-h-screen transition-colors duration-300">
+    {{-- Page wrapper — navbar clearance shares same bg as content --}}
+    <div class="min-h-screen bg-white dark:bg-slate-900 transition-colors duration-300">
+
+        {{-- Navbar clearance gap --}}
+        <div class="pt-16 sm:pt-20 lg:pt-24"></div>
+
         <section class="border-b transition-colors duration-300 bg-white border-gray-100 dark:bg-gray-800 dark:border-gray-700">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 md:pt-10 lg:pt-12 pb-6 sm:pb-8 md:pb-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10">
                 <span class="text-xs uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400 font-semibold mb-2 block transition-colors">Blog & Artikel</span>
                 <h1 class="text-2xl sm:text-4xl lg:text-5xl font-sans font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors">Artikel & Wawasan</h1>
                 <p class="text-xs sm:text-base text-gray-600 dark:text-gray-300 max-w-2xl transition-colors">Dapatkan informasi terbaru, tips, dan wawasan seputar program pemberdayaan dan kependidikan dari Bina Karya Cendekia.</p>
@@ -57,5 +62,6 @@
                 <x-pagination :paginator="$posts" />
             @endif
         </div>
-    </div>
+
+    </div>{{-- end page wrapper --}}
 @endsection

@@ -3,8 +3,15 @@
 @section('title', $siteSettings->get('contact_header_title', 'Kontak'))
 
 @section('content')
+{{-- Page wrapper — navbar clearance shares same bg as header --}}
+<div class="min-h-screen bg-gray-50 dark:bg-slate-800 transition-colors duration-300">
+
+    {{-- Navbar clearance gap --}}
+    <div class="pt-16 sm:pt-20 lg:pt-24"></div>
+
 {{-- Header --}}
-<section class="py-12 sm:py-16 lg:py-20 bg-gray-50 dark:bg-slate-800 transition-colors duration-300 pt-6 sm:pt-8 md:pt-10 lg:pt-12">
+<section class="pb-12 sm:pb-16 lg:pb-20 transition-colors duration-300">
+
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <span class="text-xs uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400 font-semibold mb-3 block transition-colors">{{ $siteSettings->get('contact_header_tagline', 'Hubungi Kami') }}</span>
         <h1 class="text-3xl sm:text-4xl lg:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4 transition-colors">{{ $siteSettings->get('contact_header_title', 'Kontak') }}</h1>
@@ -62,7 +69,6 @@
                     </div>
                 </form>
             </div>
-        </div>
 
         {{-- Contact Info Card - Modern Design --}}
         <div>
@@ -83,7 +89,6 @@
                             <h2 class="text-xl font-bold text-white">Informasi Kontak</h2>
                             <p class="text-white/70 text-xs">Kami siap membantu Anda</p>
                         </div>
-                    </div>
 
                     <div class="space-y-5">
                         {{-- Address --}}
@@ -97,7 +102,6 @@
                                 <p class="text-white/60 text-xs font-medium uppercase tracking-wider mb-1">Alamat</p>
                                 <p class="text-white text-sm leading-relaxed">{{ $address }}</p>
                             </div>
-                        </div>
                         @endif
 
                         {{-- Email --}}
@@ -110,7 +114,6 @@
                                 <p class="text-white/60 text-xs font-medium uppercase tracking-wider mb-1">Email</p>
                                 <a href="mailto:{{ $siteSettings->get('email') }}" class="text-white text-sm font-medium hover:text-white/80 transition break-all">{{ $siteSettings->get('email') }}</a>
                             </div>
-                        </div>
                         @endif
 
                         {{-- WhatsApp --}}
@@ -125,7 +128,6 @@
                                     0895611314372
                                 </a>
                             </div>
-                        </div>
                         @endif
                     </div>
 
@@ -163,7 +165,6 @@
                             </a>
                             @endif
                         </div>
-                    </div>
                     @endif
 
                     {{-- WhatsApp CTA button --}}
@@ -177,7 +178,6 @@
                     </div>
                     @endif
                 </div>
-            </div>
 
             @if($siteSettings->get('contact_show_map'))
             <div class="mt-6 pt-6 border-t border-gray-200 dark:border-slate-700 transition-colors">
@@ -203,7 +203,6 @@
             </div>
             @endif
         </div>
-    </div>
 </div>
 
 {{-- CTA Section --}}
@@ -225,6 +224,7 @@
             </a>
             @endif
         </div>
-    </div>
 </section>
+
+</div>{{-- end page wrapper --}}
 @endsection

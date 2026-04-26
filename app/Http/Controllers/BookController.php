@@ -16,7 +16,8 @@ class BookController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                     ->orWhere('author', 'like', "%{$search}%")
-                    ->orWhere('isbn', 'like', "%{$search}%");
+                    ->orWhere('isbn', 'like', "%{$search}%")
+                    ->orWhere('keywords', 'like', "%{$search}%");
             });
         }
 
@@ -51,6 +52,30 @@ class BookController extends Controller
 
         if ($book->slug !== $slug) {
             return redirect()->route('books.show', $book->slug);
+        }
+
+        // Related books: same category OR matching keywords
+        $relatedBooks = collect();
+        if ($book->category_id || $book->keywords) {
+            $relatedQuery = Book::with('category')
+                ->where('is_published', true)
+                ->where('id', '!=', $book->id)
+                ->latest();
+
+            if ($book->category_id) {
+                $relatedQuery->where('category_id', $book->category_id);
+            }
+
+            if ($book->keywords) {
+                $keywordArr = array_filter(array_map('trim', explode(',', $book->keywords)));
+                $relatedQuery->orWhere(function ($q) use ($keywordArr) {
+                    foreach ($keywordArr as $kw) {
+                        $q->orWhere('keywords', 'like', "%{$kw}%");
+                    }
+                });
+            }
+
+            $relatedBooks = $relatedQuery->take(3)->get();
         }
 
         // Prepare Book Schema
@@ -97,6 +122,6 @@ class BookController extends Controller
             $schemaData['identifier'] = $book->doi;
         }
 
-        return view('public.books.show', compact('book', 'schemaData'));
+        return view('public.books.show', compact('book', 'schemaData', 'relatedBooks'));
     }
 }

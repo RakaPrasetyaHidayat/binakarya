@@ -10,8 +10,11 @@
 
 @section('content')
 <div class="relative w-full overflow-hidden">
+    {{-- Navbar clearance gap matching hero --}}
+    <div class="pt-16 sm:pt-20 lg:pt-24 bg-gradient-to-br from-primary-600 via-primary-700 to-blue-800 dark:from-slate-900 dark:via-primary-900 dark:to-slate-900"></div>
+
     {{-- Hero Section --}}
-    <div class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-blue-800 dark:from-slate-900 dark:via-primary-900 dark:to-slate-900 pt-16 sm:pt-20 md:pt-24 lg:pt-28 py-16 sm:py-20 lg:py-24 -mt-1"
+    <div class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-blue-800 dark:from-slate-900 dark:via-primary-900 dark:to-slate-900 py-16 sm:py-20 lg:py-24">
         <div class="absolute inset-0 opacity-10">
             <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <defs>
