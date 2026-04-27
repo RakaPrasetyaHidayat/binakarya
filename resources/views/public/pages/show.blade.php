@@ -12,10 +12,7 @@
 {{-- Page wrapper with consistent bg --}}
 <div class="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
 
-    {{-- Navbar clearance — same bg as page --}}
-    <div class="pt-16 sm:pt-20 lg:pt-24"></div>
-
-    <div class="py-10 sm:py-16 lg:py-20">
+    <div class="pt-20 sm:pt-24 lg:pt-32 pb-10 sm:pb-16 lg:pb-20">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Breadcrumbs --}}

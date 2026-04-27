@@ -183,10 +183,10 @@
                 : (darkMode ? 'bg-gradient-to-r from-slate-950 to-slate-900 border-slate-700 shadow-2xl py-3 sm:py-3' : 'bg-white border-gray-300 shadow-md py-3 sm:py-3')"
             style="will-change: background-color, background-image;">
 
-            <div class="max-w-7xl mx-auto px-0 w-full flex items-center justify-between">
+            <div class="max-w-6xl mx-auto px-0 w-full flex items-center justify-between">
 
                 {{-- Left: Logo (Always Visible but smaller) --}}
-                <div class="flex items-center transition-all duration-500 origin-left mr-6 lg:mr-10">
+                <div class="flex items-center transition-all duration-500 origin-left flex-shrink-0">
                 <a href="{{ route('homepage') }}"
                     class="flex items-center flex-shrink-0 whitespace-nowrap transition-transform" title="Beranda">
                     <span class="font-serif font-bold transition-all duration-500 tracking-wide brand-logo flex gap-1"
@@ -198,7 +198,8 @@
                 </a>
                 </div>
 
-                <div class="hidden lg:flex flex-1 items-center justify-center gap-1 max-w-2xl mx-auto">
+                {{-- Center: Navigation (Centered) --}}
+                <div class="hidden lg:flex items-center gap-1 flex-1 justify-center px-4">
                 @php
                     $sortedMenus = $publicMenus->sortBy(function($menu) {
                         return strtolower(trim($menu->label)) === 'beranda' ? -1 : $menu->order;

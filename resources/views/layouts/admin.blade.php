@@ -35,18 +35,23 @@
         </div>
         <nav class="flex-1 overflow-y-auto py-8 px-4 space-y-1.5 text-sm">
             @php
-                $navItems = [
-                    ['route' => 'admin.dashboard', 'label' => 'Dashboard', 'icon' => 'grid-outline'],
-                    ['route' => 'admin.books.index', 'label' => 'Katalog Buku', 'icon' => 'book-outline'],
-                    ['route' => 'admin.posts.index', 'label' => 'Artikel Blog', 'icon' => 'newspaper-outline'],
-                    ['route' => 'admin.services.index', 'label' => 'Layanan', 'icon' => 'briefcase-outline'],
-                    ['route' => 'admin.pages.index', 'label' => 'Halaman Statis', 'icon' => 'document-text-outline'],
-                    ['route' => 'admin.team-members.index', 'label' => 'Struktur Anggota', 'icon' => 'people-outline'],
-                    ['route' => 'admin.categories.index', 'label' => 'Kategori', 'icon' => 'pricetags-outline'],
-                    ['route' => 'admin.menus.index', 'label' => 'Menu Navigasi', 'icon' => 'menu-outline'],
-                    ['route' => 'admin.menu-builder.index', 'label' => 'Menu Builder', 'icon' => 'construct-outline'],
-                    ['route' => 'admin.contacts.index', 'label' => 'Pesan Masuk', 'icon' => 'mail-outline'],
+                $allNavItems = [
+                    ['route' => 'admin.dashboard', 'label' => 'Dashboard', 'icon' => 'grid-outline', 'roles' => ['admin', 'contributor']],
+                    ['route' => 'admin.books.index', 'label' => 'Katalog Buku', 'icon' => 'book-outline', 'roles' => ['admin']],
+                    ['route' => 'admin.posts.index', 'label' => 'Artikel Blog', 'icon' => 'newspaper-outline', 'roles' => ['admin', 'contributor']],
+                    ['route' => 'admin.services.index', 'label' => 'Layanan', 'icon' => 'briefcase-outline', 'roles' => ['admin']],
+                    ['route' => 'admin.pages.index', 'label' => 'Halaman Statis', 'icon' => 'document-text-outline', 'roles' => ['admin']],
+                    ['route' => 'admin.team-members.index', 'label' => 'Struktur Anggota', 'icon' => 'people-outline', 'roles' => ['admin']],
+                    ['route' => 'admin.categories.index', 'label' => 'Kategori', 'icon' => 'pricetags-outline', 'roles' => ['admin']],
+                    ['route' => 'admin.menus.index', 'label' => 'Menu Navigasi', 'icon' => 'menu-outline', 'roles' => ['admin']],
+                    ['route' => 'admin.menu-builder.index', 'label' => 'Menu Builder', 'icon' => 'construct-outline', 'roles' => ['admin']],
+                    ['route' => 'admin.contacts.index', 'label' => 'Pesan Masuk', 'icon' => 'mail-outline', 'roles' => ['admin']],
                 ];
+
+                $userRole = auth()->user()->role;
+                $navItems = array_filter($allNavItems, function($item) use ($userRole) {
+                    return in_array($userRole, $item['roles']);
+                });
             @endphp
             @foreach($navItems as $item)
                 <a href="{{ route($item['route']) }}"
@@ -57,38 +62,38 @@
                 </a>
             @endforeach
 
-            <div class="mt-6 pt-6 border-t" :class="darkMode ? 'border-gray-700/50' : 'border-gray-100'">
-                <p class="px-3 text-xs font-semibold uppercase tracking-wider mb-3 transition-colors" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">Pengaturan</p>
-                
-                <a href="{{ route('admin.settings.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition font-medium {{ request()->routeIs('admin.settings.*') ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/50' : '' }}"
-                   :class="!{{ json_encode(request()->routeIs('admin.settings.*')) }} && (darkMode ? 'text-gray-300 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50')">
-                    <ion-icon name="settings-outline" class="w-5 h-5"></ion-icon>
-                    Pengaturan Global
-                </a>
-                
-                <a href="{{ route('admin.mail-settings.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition font-medium {{ request()->routeIs('admin.mail-settings.*') ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/50' : '' }}"
-                   :class="!{{ json_encode(request()->routeIs('admin.mail-settings.*')) }} && (darkMode ? 'text-gray-300 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50')">
-                    <ion-icon name="mail-outline" class="w-5 h-5"></ion-icon>
-                    Pengaturan Email
-                </a>
-                
-                <a href="{{ route('admin.scholar-settings.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition font-medium {{ request()->routeIs('admin.scholar-settings.*') ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/50' : '' }}"
-                   :class="!{{ json_encode(request()->routeIs('admin.scholar-settings.*')) }} && (darkMode ? 'text-gray-300 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50')">
-                    <ion-icon name="school-outline" class="w-5 h-5"></ion-icon>
-                    Google Scholar
-                </a>
-                
-                <a href="{{ route('admin.tinymce-settings.index') }}"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition font-medium {{ request()->routeIs('admin.tinymce-settings.*') ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/50' : '' }}"
-                   :class="!{{ json_encode(request()->routeIs('admin.tinymce-settings.*')) }} && (darkMode ? 'text-gray-300 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50')">
-                    <ion-icon name="code-slash-outline" class="w-5 h-5"></ion-icon>
-                    Pengaturan TinyMCE
-                </a>
-                
-                @if(auth()->user()->isAdmin())
+            @if(auth()->user()->isAdmin())
+                <div class="mt-6 pt-6 border-t" :class="darkMode ? 'border-gray-700/50' : 'border-gray-100'">
+                    <p class="px-3 text-xs font-semibold uppercase tracking-wider mb-3 transition-colors" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">Pengaturan</p>
+                    
+                    <a href="{{ route('admin.settings.index') }}"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition font-medium {{ request()->routeIs('admin.settings.*') ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/50' : '' }}"
+                       :class="!{{ json_encode(request()->routeIs('admin.settings.*')) }} && (darkMode ? 'text-gray-300 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50')">
+                        <ion-icon name="settings-outline" class="w-5 h-5"></ion-icon>
+                        Pengaturan Global
+                    </a>
+                    
+                    <a href="{{ route('admin.mail-settings.index') }}"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition font-medium {{ request()->routeIs('admin.mail-settings.*') ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/50' : '' }}"
+                       :class="!{{ json_encode(request()->routeIs('admin.mail-settings.*')) }} && (darkMode ? 'text-gray-300 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50')">
+                        <ion-icon name="mail-outline" class="w-5 h-5"></ion-icon>
+                        Pengaturan Email
+                    </a>
+                    
+                    <a href="{{ route('admin.scholar-settings.index') }}"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition font-medium {{ request()->routeIs('admin.scholar-settings.*') ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/50' : '' }}"
+                       :class="!{{ json_encode(request()->routeIs('admin.scholar-settings.*')) }} && (darkMode ? 'text-gray-300 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50')">
+                        <ion-icon name="school-outline" class="w-5 h-5"></ion-icon>
+                        Google Scholar
+                    </a>
+                    
+                    <a href="{{ route('admin.tinymce-settings.index') }}"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition font-medium {{ request()->routeIs('admin.tinymce-settings.*') ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/50' : '' }}"
+                       :class="!{{ json_encode(request()->routeIs('admin.tinymce-settings.*')) }} && (darkMode ? 'text-gray-300 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50')">
+                        <ion-icon name="code-slash-outline" class="w-5 h-5"></ion-icon>
+                        Pengaturan TinyMCE
+                    </a>
+
                     <a href="{{ route('admin.users.index') }}"
                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition font-medium {{ request()->routeIs('admin.users.*') ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/50' : '' }}"
                        :class="!{{ json_encode(request()->routeIs('admin.users.*')) }} && (darkMode ? 'text-gray-300 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50')">
@@ -102,8 +107,8 @@
                         <ion-icon name="shield-checkmark-outline" class="w-5 h-5"></ion-icon>
                         Logs Aktivitas
                     </a>
-                @endif
-            </div>
+                </div>
+            @endif
         </nav>
         <div class="p-4 border-t transition-colors" :class="darkMode ? 'border-slate-800' : 'border-gray-100'">
             <p class="font-medium text-sm transition-colors" :class="darkMode ? 'text-gray-200' : 'text-gray-900'">{{ auth()->user()->name }}</p>

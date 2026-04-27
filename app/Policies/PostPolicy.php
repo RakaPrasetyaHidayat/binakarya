@@ -55,12 +55,16 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        // Only admin can delete posts
+        // Admin can delete any post
         if ($user->isAdmin()) {
             return true;
         }
 
-        // Contributors cannot delete posts
+        // Contributors can only delete their own posts
+        if ($user->isContributor()) {
+            return $user->id === $post->user_id;
+        }
+
         return false;
     }
 

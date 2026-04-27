@@ -28,19 +28,17 @@
 
 @section('content')
 @php
+    $storageImage = $post->featured_image ? asset('storage/' . $post->featured_image) : null;
     preg_match('/<img[^>]+src=["\'"]([^"\']+)["\'"]/i', $post->body ?? '', $firstImageMatch);
     $bodyFirstImage = $firstImageMatch[1] ?? null;
-    $articleVisual = $post->detail_image_url ?: $post->featured_image_url ?: $bodyFirstImage;
+    $articleVisual = $post->detail_image_url ?: $storageImage ?: $post->featured_image_url ?: $bodyFirstImage;
 @endphp
 
 {{-- Page wrapper — navbar clearance shares same bg as content --}}
 <div class="min-h-screen transition-colors duration-300"
-    :class="darkMode ? 'bg-slate-900' : 'bg-white'">
+    :class="darkMode ? 'bg-slate-900' : 'bg-gray-50'">
 
-    {{-- Navbar clearance gap --}}
-    <div class="pt-16 sm:pt-20 lg:pt-24"></div>
-
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-32 pb-16">
 
         <article>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
@@ -68,14 +66,6 @@
                     <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 leading-tight transition-colors duration-300"
                         :class="darkMode ? 'text-white' : 'text-gray-900'">{{ $post->title }}</h1>
 
-                    {{-- Featured thumbnail below title --}}
-                    @if($articleVisual)
-                    <div class="mb-5 rounded-xl overflow-hidden border transition-colors duration-300 max-h-[280px]"
-                        :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
-                        <img src="{{ $articleVisual }}" alt="{{ $post->title }}"
-                            class="w-full h-auto max-h-[280px] object-cover">
-                    </div>
-                    @endif
 
                     {{-- Meta info --}}
                     <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-sm mb-6 pb-6 border-b transition-colors duration-300"
@@ -128,6 +118,27 @@
                         </ul>
                     </div>
                     @endif
+
+                    {{-- Featured image / Placeholder relocated before article body --}}
+                    <div class="mb-10 rounded-2xl overflow-hidden border-4 transition-all duration-300 group shadow-lg"
+                        :class="darkMode ? 'border-slate-800 bg-slate-800' : 'border-white bg-white shadow-gray-200'">
+                        <div class="aspect-[3/2] relative overflow-hidden transition-colors duration-300"
+                            :class="darkMode ? 'bg-slate-900' : 'bg-gray-100'">
+                            @if($articleVisual)
+                                <img src="{{ $articleVisual }}" 
+                                     @if($post->title) alt="{{ $post->title }}" @endif
+                                     class="w-full h-full object-cover transform group-hover:scale-[1.02] transition-transform duration-700">
+                            @else
+                                {{-- Placeholder matching x-blog-card but taller --}}
+                                <div class="w-full h-full bg-gradient-to-br from-primary-50 to-blue-50 dark:from-primary-900/20 dark:to-blue-900/20 flex flex-col items-center justify-center gap-4">
+                                    <svg class="w-16 h-16 sm:w-20 sm:h-20 text-primary-200 dark:text-primary-900/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    <span class="text-xs font-bold uppercase tracking-[0.2em] text-primary-300/50 dark:text-primary-800/50">Gambar Artikel</span>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
 
                     {{-- Article body --}}
                     <div class="prose prose-lg max-w-none leading-relaxed blog-content transition-colors duration-300"

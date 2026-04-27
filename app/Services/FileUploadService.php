@@ -9,32 +9,31 @@ use Illuminate\Validation\ValidationException;
 
 class FileUploadService
 {
-    // Whitelist MIME types dan extensions untuk keamanan
     private const ALLOWED_MIMES = [
-        'covers'    => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
-        'pdfs'      => ['application/pdf'],
-        'posts'     => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
-        'site'      => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/svg+xml'],
-        'pages'     => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
-        'previews'  => ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+        'covers' => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+        'pdfs' => ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.oasis.opendocument.text'],
+        'posts' => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+        'site' => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/svg+xml'],
+        'pages' => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+        'previews' => ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.oasis.opendocument.text'],
     ];
 
     private const ALLOWED_EXTENSIONS = [
-        'covers'    => ['jpg', 'jpeg', 'png', 'webp'],
-        'pdfs'      => ['pdf'],
-        'posts'     => ['jpg', 'jpeg', 'png', 'webp'],
-        'site'      => ['jpg', 'jpeg', 'png', 'webp', 'svg'],
-        'pages'     => ['jpg', 'jpeg', 'png', 'webp'],
-        'previews'  => ['pdf', 'jpg', 'jpeg', 'png', 'webp'],
+        'covers' => ['jpg', 'jpeg', 'png', 'webp'],
+        'pdfs' => ['pdf', 'doc', 'docx', 'odt'],
+        'posts' => ['jpg', 'jpeg', 'png', 'webp'],
+        'site' => ['jpg', 'jpeg', 'png', 'webp', 'svg'],
+        'pages' => ['jpg', 'jpeg', 'png', 'webp'],
+        'previews' => ['pdf', 'jpg', 'jpeg', 'png', 'webp', 'doc', 'docx', 'odt'],
     ];
 
     private const MAX_FILE_SIZES = [
-        'covers'    => 2048,
-        'pdfs'      => 51200,
-        'posts'     => 2048,
-        'site'      => 2048,
-        'pages'     => 2048,
-        'previews'  => 10240,
+        'covers' => 2048,
+        'pdfs' => 51200,
+        'posts' => 2048,
+        'site' => 2048,
+        'pages' => 2048,
+        'previews' => 10240,
     ];
 
     /**
@@ -88,7 +87,8 @@ class FileUploadService
      */
     public function delete(?string $path): void
     {
-        if (!$path) return;
+        if (!$path)
+            return;
 
         // Prevent directory traversal
         if (str_contains($path, '..') || str_contains($path, '~')) {

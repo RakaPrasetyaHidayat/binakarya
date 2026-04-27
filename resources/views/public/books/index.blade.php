@@ -9,12 +9,8 @@
      @theme-changed.window="darkMode = $event.detail.isDark"
      class="min-h-screen transition-colors duration-300 bg-[#FAFAF8] dark:bg-gray-900">
     
-    {{-- Navbar clearance gap matching header --}}
-    {{-- Navbar clearance gap matching header background --}}
-    <div class="pt-16 sm:pt-20 lg:pt-24 transition-colors duration-300 border-b border-gray-100 dark:border-gray-700" :class="darkMode ? 'bg-gray-800' : 'bg-white'"></div>
-
     {{-- Header --}}
-    <div class="border-b transition-colors duration-300 bg-white border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+    <div class="border-b transition-colors duration-300 bg-white border-gray-100 dark:bg-gray-800 dark:border-gray-700 pt-16 sm:pt-20 lg:pt-24">
         <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pb-5 sm:pb-8 md:pb-10 lg:pb-14">
             <div class="max-w-2xl">
                 <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-serif font-bold mb-2 sm:mb-3 md:mb-4 tracking-tight transition-colors duration-300 text-gray-900 dark:text-white leading-tight">Katalog Buku</h1>

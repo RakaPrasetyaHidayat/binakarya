@@ -6,24 +6,21 @@
 {{-- Page wrapper — navbar clearance shares same bg as header --}}
 <div class="min-h-screen bg-gray-50 dark:bg-slate-800 transition-colors duration-300">
 
-    {{-- Navbar clearance gap --}}
-    <div class="pt-16 sm:pt-20 lg:pt-24"></div>
-
 {{-- Header --}}
-<section class="pb-12 sm:pb-16 lg:pb-20 transition-colors duration-300">
+<section class="pt-24 sm:pt-32 lg:pt-40 pb-12 sm:pb-16 lg:pb-20 transition-colors duration-300">
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <span class="text-xs uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400 font-semibold mb-3 block transition-colors">{{ $siteSettings->get('contact_header_tagline', 'Hubungi Kami') }}</span>
-        <h1 class="text-3xl sm:text-4xl lg:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4 transition-colors">{{ $siteSettings->get('contact_header_title', 'Kontak') }}</h1>
-        <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-xl mx-auto transition-colors">{{ $siteSettings->get('contact_header_description', 'Tertarik untuk bekerja sama atau memiliki pertanyaan? Kami siap membantu dan merespons setiap inquiry Anda.') }}</p>
+        <span class="text-xs uppercase tracking-[0.2em] text-primary-600 dark:text-primary-400 font-bold mb-4 block transition-colors bg-primary-50 dark:bg-primary-900/30 w-fit mx-auto px-4 py-1.5 rounded-full">{{ $siteSettings->get('contact_header_tagline', 'Hubungi Kami') }}</span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-6 transition-colors">{{ $siteSettings->get('contact_header_title', 'Kontak') }}</h1>
+        <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors leading-relaxed">{{ $siteSettings->get('contact_header_description', 'Tertarik untuk bekerja sama atau memiliki pertanyaan? Kami siap membantu dan merespons setiap inquiry Anda.') }}</p>
     </div>
 </section>
 
 {{-- Contact Content --}}
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-12 sm:py-16 lg:py-24">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
         {{-- Contact Form --}}
-        <div>
+        <div class="lg:col-span-7">
             <h2 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-6 transition-colors">{{ $siteSettings->get('contact_form_title', 'Kirim Pesan') }}</h2>
             <p class="text-sm text-gray-600 dark:text-gray-400 mb-8 transition-colors">{{ $siteSettings->get('contact_form_description', 'Tulis pesan Anda dan tim kami akan segera menghubungi Anda.') }}</p>
             <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-6 sm:p-8 border border-gray-100 dark:border-slate-700 transition-colors">
@@ -71,9 +68,9 @@
             </div>
 
         {{-- Contact Info Card - Modern Design --}}
-        <div>
+        <div class="lg:col-span-5">
             {{-- Main Contact Card --}}
-            <div class="relative overflow-hidden rounded-3xl shadow-xl transition-colors"
+            <div class="relative overflow-hidden rounded-[2rem] shadow-2xl transition-colors h-full"
                  :class="darkMode ? 'bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 border border-slate-700' : 'bg-gradient-to-br from-primary-600 via-primary-700 to-blue-800'">
                 {{-- Decorative circles --}}
                 <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-10 bg-white"></div>

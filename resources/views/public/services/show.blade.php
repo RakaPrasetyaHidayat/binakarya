@@ -10,8 +10,6 @@
 
 @section('content')
 <div class="relative w-full overflow-hidden">
-    {{-- Navbar clearance gap matching hero --}}
-    <div class="pt-16 sm:pt-20 lg:pt-24 bg-gradient-to-br from-primary-600 via-primary-700 to-blue-800 dark:from-slate-900 dark:via-primary-900 dark:to-slate-900"></div>
 
     {{-- Hero Section --}}
     <div class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-blue-800 dark:from-slate-900 dark:via-primary-900 dark:to-slate-900 py-16 sm:py-20 lg:py-24">
@@ -191,59 +189,6 @@
             {{-- Sidebar --}}
             <aside class="lg:col-span-1">
                 <div class="lg:sticky lg:top-28 space-y-6">
-                    {{-- Pricing Card --}}
-                    <div class="p-6 rounded-2xl border transition-colors duration-300" :class="darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200 shadow-sm'">
-                        <h3 class="text-lg font-bold mb-4 transition-colors" :class="darkMode ? 'text-white' : 'text-gray-900'">Paket Layanan</h3>
-                        
-                        @php
-                            $plans = $service->plans ?? collect();
-                        @endphp
-                        
-                        @if($plans->count() > 0)
-                            <div class="space-y-4">
-                                @foreach($plans as $plan)
-                                <div class="p-4 rounded-xl border transition-all duration-300 {{ $plan->is_popular ? 'border-primary-500 bg-primary-50/50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-slate-700' }}">
-                                    @if($plan->is_popular)
-                                        <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400 mb-2">⭐ Rekomendasi</span>
-                                    @endif
-                                    <h4 class="font-semibold text-sm mb-1 transition-colors" :class="darkMode ? 'text-white' : 'text-gray-900'">{{ $plan->name }}</h4>
-                                    <div class="flex items-baseline gap-1 mb-2">
-                                        <span class="text-2xl font-bold text-primary-600 dark:text-primary-400">Rp {{ number_format($plan->price, 0, ',', '.') }}</span>
-                                        @if($plan->subtitle)
-                                            <span class="text-xs text-gray-500 dark:text-gray-400">/ {{ $plan->subtitle }}</span>
-                                        @endif
-                                    </div>
-                                    <!-- Description removed as it's not in the schema -->
-                                    @if($plan->features && is_array($plan->features) && count($plan->features) > 0)
-                                        <ul class="space-y-1.5 mb-4">
-                                            @foreach($plan->features as $feature)
-                                                @if($feature)
-                                                <li class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-                                                    <svg class="w-3.5 h-3.5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                                                    {{ $feature }}
-                                                </li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                    <a href="{{ route('contact') }}?service={{ $service->slug }}&plan={{ $plan->id }}" 
-                                       class="block w-full text-center py-2.5 rounded-lg text-xs font-semibold transition-all {{ $plan->is_recommended ? 'bg-primary-600 text-white hover:bg-primary-700' : 'border-2 border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20' }}">
-                                        Pilih Paket
-                                    </a>
-                                </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="text-center py-6">
-                                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Hubungi kami untuk informasi harga</p>
-                                <a href="{{ route('contact') }}?service={{ $service->slug }}" 
-                                   class="block w-full text-center py-2.5 rounded-lg bg-primary-600 text-white text-xs font-semibold hover:bg-primary-700 transition">
-                                    Konsultasi Gratis
-                                </a>
-                            </div>
-                        @endif
-                    </div>
-
                     {{-- CTA Card --}}
                     <div class="p-6 rounded-2xl bg-gradient-to-br from-primary-600 to-blue-700 text-white">
                         <h3 class="text-lg font-bold mb-2">Butuh Bantuan?</h3>
@@ -270,7 +215,7 @@
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400" :class="darkMode ? 'text-white' : 'text-gray-900'">{{ $other->title }}</p>
                                     @if($other->excerpt)
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ Str::limit($other->excerpt, 40) }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ Str::limit(strip_tags($other->excerpt), 40) }}</p>
                                     @endif
                                 </div>
                             </a>
@@ -281,6 +226,70 @@
                 </div>
             </aside>
         </div>
+        {{-- Pricing Plans Section (Relocated and Horizontal) --}}
+        @php
+            $plans = $service->plans ?? collect();
+        @endphp
+        
+        @if($plans->count() > 0)
+            <div class="mt-16 sm:mt-20">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h3 class="text-2xl font-bold transition-colors" :class="darkMode ? 'text-white' : 'text-gray-900'">Pilihan Paket</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Pilih paket yang paling sesuai dengan kebutuhan publikasi Anda.</p>
+                    </div>
+                    <div class="hidden sm:flex gap-2">
+                        <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Slide untuk melihat paket &rarr;</span>
+                    </div>
+                </div>
+
+                {{-- Horizontal pricing cards --}}
+                <div class="flex flex-row overflow-x-auto pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 gap-6 snap-x snap-mandatory hide-scrollbar">
+                    @foreach($plans as $plan)
+                    <div class="flex-none w-[280px] sm:w-[320px] snap-center">
+                        <div class="h-full flex flex-col p-6 rounded-2xl border transition-all duration-300 {{ $plan->is_popular ? 'border-primary-500 ring-1 ring-primary-500 bg-primary-50/20 dark:bg-primary-900/10' : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 shadow-sm' }}">
+                            @if($plan->is_popular)
+                                <div class="mb-4">
+                                    <span class="inline-block text-[10px] font-bold uppercase tracking-wider bg-primary-600 text-white px-3 py-1 rounded-full shadow-lg shadow-primary-600/20">⭐ Terbaik</span>
+                                </div>
+                            @endif
+                            
+                            <h4 class="text-lg font-bold mb-1 transition-colors" :class="darkMode ? 'text-white' : 'text-gray-900'">{{ $plan->name }}</h4>
+                            <div class="flex items-baseline gap-1 mb-6">
+                                <span class="text-3xl font-bold text-primary-600 dark:text-primary-400">Rp {{ number_format($plan->price, 0, ',', '.') }}</span>
+                                @if($plan->subtitle)
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">/ {{ $plan->subtitle }}</span>
+                                @endif
+                            </div>
+
+                            @if($plan->features && is_array($plan->features) && count($plan->features) > 0)
+                                <ul class="space-y-3 mb-8 flex-1">
+                                    @foreach($plan->features as $feature)
+                                        @if($feature)
+                                        <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300 leading-tight">
+                                            <svg class="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                            {{ $feature }}
+                                        </li>
+                                        @endif
+                                    @endforeach
+                                </ul>
+                            @endif
+
+                            <a href="{{ route('contact') }}?service={{ $service->slug }}&plan={{ $plan->id }}" 
+                               class="block w-full text-center py-3.5 rounded-xl font-bold transition-all {{ $plan->is_popular ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-600/30' : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600 border border-transparent' }}">
+                                Pilih Paket
+                            </a>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            
+            <style>
+                .hide-scrollbar::-webkit-scrollbar { display: none; }
+                .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            </style>
+        @endif
 
         {{-- Bottom CTA --}}
         <div class="mt-12 p-8 rounded-2xl bg-gradient-to-br from-primary-50 to-blue-50 dark:from-slate-800 dark:to-slate-700 border border-primary-100 dark:border-slate-600">

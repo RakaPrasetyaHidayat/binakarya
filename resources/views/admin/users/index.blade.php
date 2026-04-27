@@ -35,7 +35,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Role</label>
                 <select name="role" class="w-full rounded-xl border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-primary-500 focus:border-primary-500 text-sm">
-                    <option value="editor">Editor</option>
+                    <option value="contributor">Contributor</option>
                     <option value="admin">Admin</option>
                 </select>
             </div>
@@ -114,7 +114,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Role</label>
                                     <select name="role" class="w-full rounded-xl border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-primary-500 focus:border-primary-500 text-sm">
-                                        <option value="editor" {{ $user->role === 'editor' ? 'selected' : '' }}>Editor</option>
+                                        <option value="contributor" {{ $user->role === 'contributor' ? 'selected' : '' }}>Contributor</option>
                                         <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
                                     </select>
                                 </div>

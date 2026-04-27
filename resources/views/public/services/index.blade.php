@@ -12,10 +12,7 @@
 {{-- Page wrapper — navbar clearance shares same bg as content --}}
 <div class="min-h-screen bg-white dark:bg-slate-800 transition-colors duration-300">
 
-    {{-- Navbar clearance gap --}}
-    <div class="pt-16 sm:pt-20 lg:pt-24"></div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-32 pb-8 sm:pb-12 lg:pb-16">
 
     <div class="text-center mb-8 sm:mb-12">
         <span class="text-xs uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400 font-semibold mb-2 block transition-colors">{{ $siteSettings->get('services_header_tagline', 'Layanan Kami') }}</span>
@@ -49,7 +46,7 @@
                 </div>
 
                 @if($showExcerpt)
-                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-5 leading-relaxed transition-colors">{{ $service->excerpt }}</p>
+                    <div class="text-gray-600 dark:text-gray-400 text-sm mb-5 leading-relaxed transition-colors">{!! $service->excerpt !!}</div>
                 @endif
                 <span class="text-primary-600 dark:text-primary-400 text-sm font-medium flex items-center gap-1">
                     {{ $service->external_url ? 'Kunjungi Layanan' : 'Selengkapnya' }} 
@@ -64,13 +61,13 @@
     @endif
 
     @if($siteSettings->get('services_cta_title') || $siteSettings->get('services_cta_description') || $siteSettings->get('services_cta_button_text'))
-    <section class="mt-12 sm:mt-16 bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+    <section class="mt-12 sm:mt-16 rounded-2xl p-6 sm:p-8 text-gray-900 dark:text-white">
         <div class="text-center max-w-3xl mx-auto">
             <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">{{ $siteSettings->get('services_cta_title', 'Masih Bingung?') }}</h2>
-            <p class="text-sm sm:text-base text-white/90 mb-6 sm:mb-8 leading-relaxed">{{ $siteSettings->get('services_cta_description', 'Hubungi tim kami untuk diskusi lebih lanjut dan dapatkan solusi yang tepat untuk kebutuhan organisasi Anda.') }}</p>
+            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 leading-relaxed">{{ $siteSettings->get('services_cta_description', 'Hubungi tim kami untuk diskusi lebih lanjut dan dapatkan solusi yang tepat untuk kebutuhan organisasi Anda.') }}</p>
             @if($siteSettings->get('services_cta_button_text'))
                 <a href="{{ $siteSettings->get('cta_button_link', route('contact')) }}"
-                   class="cta-center inline-flex items-center justify-center gap-2 rounded-lg bg-white text-primary-700 font-semibold px-6 sm:px-8 py-2.5 sm:py-3 shadow-lg shadow-white/20 hover:bg-gray-100 transition text-sm sm:text-base"
+                   class="cta-center inline-flex items-center justify-center gap-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 sm:px-8 py-2.5 sm:py-3 shadow-lg transition text-sm sm:text-base"
                    style="display:inline-flex;align-items:center;justify-content:center;">
                     {{ $siteSettings->get('services_cta_button_text') }}
                 </a>
