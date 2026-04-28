@@ -228,7 +228,10 @@
         </div>
         {{-- Pricing Plans Section (Relocated and Horizontal) --}}
         @php
-            $plans = $service->plans ?? collect();
+            $plans = ($service->plans ?? collect())
+                ->where('is_active', true)
+                ->sortBy('order')
+                ->values();
         @endphp
         
         @if($plans->count() > 0)
@@ -243,30 +246,34 @@
                     </div>
                 </div>
 
-                {{-- Horizontal pricing cards --}}
-                <div class="flex flex-row overflow-x-auto pb-6 -mx-4 px-4 sm:mx-0 sm:px-0 gap-6 snap-x snap-mandatory hide-scrollbar">
+                {{-- Mobile horizontal, desktop full grid --}}
+                <div class="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible pb-4 md:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 gap-3 md:gap-4 snap-x snap-mandatory hide-scrollbar">
                     @foreach($plans as $plan)
-                    <div class="flex-none w-[280px] sm:w-[320px] snap-center">
-                        <div class="h-full flex flex-col p-6 rounded-2xl border transition-all duration-300 {{ $plan->is_popular ? 'border-primary-500 ring-1 ring-primary-500 bg-primary-50/20 dark:bg-primary-900/10' : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 shadow-sm' }}">
+                    <div class="flex-none w-[250px] sm:w-[270px] md:w-auto snap-center">
+                        <div class="h-full flex flex-col p-4 md:p-5 rounded-2xl border transition-all duration-300 {{ $plan->is_popular ? 'border-primary-500 ring-1 ring-primary-500 bg-primary-50/20 dark:bg-primary-900/10' : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 shadow-sm' }}">
                             @if($plan->is_popular)
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <span class="inline-block text-[10px] font-bold uppercase tracking-wider bg-primary-600 text-white px-3 py-1 rounded-full shadow-lg shadow-primary-600/20">⭐ Terbaik</span>
                                 </div>
                             @endif
                             
-                            <h4 class="text-lg font-bold mb-1 transition-colors" :class="darkMode ? 'text-white' : 'text-gray-900'">{{ $plan->name }}</h4>
-                            <div class="flex items-baseline gap-1 mb-6">
-                                <span class="text-3xl font-bold text-primary-600 dark:text-primary-400">Rp {{ number_format($plan->price, 0, ',', '.') }}</span>
+                            <h4 class="text-base md:text-lg font-bold mb-1 transition-colors line-clamp-1" :class="darkMode ? 'text-white' : 'text-gray-900'">{{ $plan->name }}</h4>
+                            <div class="mb-4 flex items-end justify-between gap-2">
+                                <span class="text-3xl md:text-[2rem] leading-none font-bold text-primary-600 dark:text-primary-400 whitespace-nowrap">
+                                    Rp {{ number_format($plan->price, 0, ',', '.') }}
+                                </span>
                                 @if($plan->subtitle)
-                                    <span class="text-xs text-gray-500 dark:text-gray-400">/ {{ $plan->subtitle }}</span>
+                                    <span class="text-[10px] md:text-[11px] text-gray-500 dark:text-gray-400 min-w-0 truncate text-right whitespace-nowrap">
+                                        / {{ $plan->subtitle }}
+                                    </span>
                                 @endif
                             </div>
 
                             @if($plan->features && is_array($plan->features) && count($plan->features) > 0)
-                                <ul class="space-y-3 mb-8 flex-1">
+                                <ul class="space-y-2 mb-5 flex-1">
                                     @foreach($plan->features as $feature)
                                         @if($feature)
-                                        <li class="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300 leading-tight">
+                                        <li class="flex items-start gap-2 text-xs md:text-sm text-gray-600 dark:text-gray-300 leading-tight">
                                             <svg class="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                                             {{ $feature }}
                                         </li>
@@ -276,7 +283,7 @@
                             @endif
 
                             <a href="{{ route('contact') }}?service={{ $service->slug }}&plan={{ $plan->id }}" 
-                               class="block w-full text-center py-3.5 rounded-xl font-bold transition-all {{ $plan->is_popular ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-600/30' : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600 border border-transparent' }}">
+                               class="block w-full text-center py-2.5 md:py-3 rounded-xl text-sm font-bold transition-all {{ $plan->is_popular ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-600/30' : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600 border border-transparent' }}">
                                 Pilih Paket
                             </a>
                         </div>

@@ -20,8 +20,15 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        // Anyone can view, but restricted to admin panel
-        return $user->isAdmin() || $user->isContributor();
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ($user->isContributor()) {
+            return $user->id === $post->user_id;
+        }
+
+        return false;
     }
 
     /**

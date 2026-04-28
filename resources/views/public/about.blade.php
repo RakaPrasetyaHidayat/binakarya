@@ -9,28 +9,24 @@ Tentang Kami
 @endsection
 
 @section('content')
-{{-- Header Hero - Vision Center Style --}}
-<section class="relative pt-16 sm:pt-20 lg:pt-32 pb-20 sm:pb-28 lg:pb-32 bg-gradient-to-br from-primary-700 via-primary-800 to-slate-900 overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-primary-300 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl"></div>
-    </div>
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-        <span class="text-xs uppercase tracking-[0.2em] text-primary-200 font-semibold mb-3 block">Tentang Kami</span>
-        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-white mb-5 leading-tight brand-logo">
-            Bina Karya <span class="text-primary-300">Cendekia</span>
-        </h1>
-        <p class="text-base sm:text-lg text-primary-100 max-w-2xl mx-auto leading-relaxed">
+{{-- Page Header — konsisten dengan halaman lain --}}
+<div class="page-header">
+    <div class="page-header-inner">
+        <span class="page-header-tagline">Tentang Kami</span>
+        <h1 class="page-header-title">Bina Karya <span class="text-primary-600">Cendekia</span></h1>
+        <p class="page-header-desc max-w-2xl">
             {{ $siteSettings->get('about_profile', 'Lembaga penerbitan dan pengembangan ilmu pengetahuan yang berdedikasi untuk memajukan literasi dan penelitian di Indonesia.') }}
         </p>
     </div>
-</section>
+</div>
 
     @php $aboutSecCount = 0; @endphp
 
+<div class="page-wrapper">
+
     {{-- Founder Profile --}}
     @php $bgClass = ($aboutSecCount++ % 2 == 0) ? 'bg-white dark:bg-slate-900' : 'bg-slate-50 dark:bg-slate-800'; @endphp
-    <section class="py-12 sm:py-16 lg:py-20 {{ $bgClass }} transition-colors duration-300">
+    <section class="py-10 sm:py-14 lg:py-16 {{ $bgClass }} transition-colors duration-300">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-primary-700 dark:bg-slate-800 rounded-3xl overflow-hidden shadow-2xl">
             <div class="flex flex-col lg:flex-row">
@@ -70,7 +66,7 @@ Tentang Kami
 
     {{-- Content Area --}}
     @php $bgClass = ($aboutSecCount++ % 2 == 0) ? 'bg-white dark:bg-slate-900' : 'bg-slate-50 dark:bg-slate-800'; @endphp
-    <div class="py-12 sm:py-16 lg:py-20 {{ $bgClass }} transition-colors duration-300" x-data="{ darkMode: document.documentElement.classList.contains('dark') }" @theme-changed.window="darkMode = $event.detail.isDark">
+    <div class="py-10 sm:py-14 lg:py-16 {{ $bgClass }} transition-colors duration-300" x-data="{ darkMode: document.documentElement.classList.contains('dark') }" @theme-changed.window="darkMode = $event.detail.isDark">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     {{-- Visi & Misi Grid --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 sm:mb-16">
@@ -104,34 +100,34 @@ Tentang Kami
             <h2 class="text-lg sm:text-2xl lg:text-3xl font-serif font-bold text-gray-900 dark:text-white mb-2 sm:mb-3 transition-colors">{{ $siteSettings->get('about_values_title', 'Alasan Memilih Kami') }}</h2>
             <p class="text-xs sm:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors">Nilai utama yang membuat layanan kami terpercaya untuk kebutuhan Anda.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <div class="p-4 sm:p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 transition-all hover:shadow-lg dark:hover:shadow-lg dark:hover:shadow-primary-500/10 group">
-                <div class="w-9 h-9 bg-primary-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
-                    <ion-icon name="star-outline" class="text-white text-base"></ion-icon>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div class="p-3 sm:p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 transition-all hover:shadow-md group">
+                <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform shadow-md">
+                    <ion-icon name="star-outline" class="text-white text-sm"></ion-icon>
                 </div>
-                <h3 class="font-semibold text-sm sm:text-base text-gray-900 dark:text-white mb-2 transition-colors">{{ $siteSettings->get('about_value_1_title', 'Kualitas') }}</h3>
-                <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed transition-colors">{{ $siteSettings->get('about_value_1_desc', 'Standar akademik tinggi dalam setiap publikasi') }}</p>
+                <h3 class="font-semibold text-xs sm:text-sm text-gray-900 dark:text-white mb-1.5 transition-colors">{{ $siteSettings->get('about_value_1_title', 'Kualitas') }}</h3>
+                <p class="text-[11px] sm:text-xs text-gray-600 dark:text-gray-400 leading-relaxed transition-colors">{{ $siteSettings->get('about_value_1_desc', 'Standar akademik tinggi dalam setiap publikasi') }}</p>
             </div>
-            <div class="p-4 sm:p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 transition-all hover:shadow-lg dark:hover:shadow-lg dark:hover:shadow-primary-500/10 group">
-                <div class="w-9 h-9 bg-primary-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
-                    <ion-icon name="shield-checkmark-outline" class="text-white text-base"></ion-icon>
+            <div class="p-3 sm:p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 transition-all hover:shadow-md group">
+                <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform shadow-md">
+                    <ion-icon name="shield-checkmark-outline" class="text-white text-sm"></ion-icon>
                 </div>
-                <h3 class="font-semibold text-sm sm:text-base text-gray-900 dark:text-white mb-2 transition-colors">{{ $siteSettings->get('about_value_2_title', 'Integritas') }}</h3>
-                <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed transition-colors">{{ $siteSettings->get('about_value_2_desc', 'Etika dan kejujuran ilmiah yang kokoh') }}</p>
+                <h3 class="font-semibold text-xs sm:text-sm text-gray-900 dark:text-white mb-1.5 transition-colors">{{ $siteSettings->get('about_value_2_title', 'Integritas') }}</h3>
+                <p class="text-[11px] sm:text-xs text-gray-600 dark:text-gray-400 leading-relaxed transition-colors">{{ $siteSettings->get('about_value_2_desc', 'Etika dan kejujuran ilmiah yang kokoh') }}</p>
             </div>
-            <div class="p-4 sm:p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 transition-all hover:shadow-lg dark:hover:shadow-lg dark:hover:shadow-primary-500/10 group">
-                <div class="w-9 h-9 bg-primary-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
-                    <ion-icon name="bulb-outline" class="text-white text-base"></ion-icon>
+            <div class="p-3 sm:p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 transition-all hover:shadow-md group">
+                <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform shadow-md">
+                    <ion-icon name="bulb-outline" class="text-white text-sm"></ion-icon>
                 </div>
-                <h3 class="font-semibold text-sm sm:text-base text-gray-900 dark:text-white mb-2 transition-colors">{{ $siteSettings->get('about_value_3_title', 'Inovasi') }}</h3>
-                <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed transition-colors">{{ $siteSettings->get('about_value_3_desc', 'Pemikiran kreatif dan solusi baru') }}</p>
+                <h3 class="font-semibold text-xs sm:text-sm text-gray-900 dark:text-white mb-1.5 transition-colors">{{ $siteSettings->get('about_value_3_title', 'Inovasi') }}</h3>
+                <p class="text-[11px] sm:text-xs text-gray-600 dark:text-gray-400 leading-relaxed transition-colors">{{ $siteSettings->get('about_value_3_desc', 'Pemikiran kreatif dan solusi baru') }}</p>
             </div>
-            <div class="p-4 sm:p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 transition-all hover:shadow-lg dark:hover:shadow-lg dark:hover:shadow-primary-500/10 group">
-                <div class="w-9 h-9 bg-primary-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
-                    <ion-icon name="globe-outline" class="text-white text-base"></ion-icon>
+            <div class="p-3 sm:p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 transition-all hover:shadow-md group">
+                <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform shadow-md">
+                    <ion-icon name="globe-outline" class="text-white text-sm"></ion-icon>
                 </div>
-                <h3 class="font-semibold text-sm sm:text-base text-gray-900 dark:text-white mb-2 transition-colors">{{ $siteSettings->get('about_value_4_title', 'Aksesibilitas') }}</h3>
-                <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed transition-colors">{{ $siteSettings->get('about_value_4_desc', 'Ilmu pengetahuan untuk semua orang') }}</p>
+                <h3 class="font-semibold text-xs sm:text-sm text-gray-900 dark:text-white mb-1.5 transition-colors">{{ $siteSettings->get('about_value_4_title', 'Aksesibilitas') }}</h3>
+                <p class="text-[11px] sm:text-xs text-gray-600 dark:text-gray-400 leading-relaxed transition-colors">{{ $siteSettings->get('about_value_4_desc', 'Ilmu pengetahuan untuk semua orang') }}</p>
             </div>
         </div>
     </section>
@@ -145,33 +141,33 @@ Tentang Kami
         </div>
 
         @if($teamMembers->count())
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
                 @foreach($teamMembers as $member)
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-10 shadow-sm dark:shadow-lg border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg dark:hover:shadow-xl transition-all group flex flex-col items-center">
-                        <div class="mb-6">
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700 text-center hover:shadow-md transition-all group flex flex-col items-center">
+                        <div class="mb-3 sm:mb-5">
                             @if($member->photo)
                                 <img src="{{ asset('storage/' . $member->photo) }}" alt="{{ $member->name }}"
-                                     class="w-32 h-32 sm:w-40 sm:h-40 rounded-full mx-auto object-cover shadow-md border-4 border-primary-100 dark:border-primary-900/30 group-hover:border-primary-300 dark:group-hover:border-primary-700 transition-all">
+                                     class="w-16 h-16 sm:w-32 sm:h-32 rounded-full mx-auto object-cover shadow-md border-2 sm:border-4 border-primary-100 dark:border-primary-900/30 group-hover:border-primary-300 transition-all">
                             @else
-                                <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full mx-auto bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-md border-4 border-primary-100 dark:border-primary-900/30">
-                                    <span class="text-white font-bold text-3xl sm:text-4xl">{{ substr($member->name, 0, 1) }}</span>
+                                <div class="w-16 h-16 sm:w-32 sm:h-32 rounded-full mx-auto bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-md border-2 sm:border-4 border-primary-100 dark:border-primary-900/30">
+                                    <span class="text-white font-bold text-xl sm:text-3xl">{{ substr($member->name, 0, 1) }}</span>
                                 </div>
                             @endif
                         </div>
-                        <h4 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition animate-fade-in">
+                        <h4 class="text-sm sm:text-xl font-bold text-gray-900 dark:text-white mb-1 sm:mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition leading-tight">
                             {{ $member->name }}
                         </h4>
-                        <p class="text-primary-600 dark:text-primary-400 text-base sm:text-lg font-medium mb-4">
+                        <p class="text-primary-600 dark:text-primary-400 text-xs sm:text-base font-medium mb-2 sm:mb-3">
                             {{ $member->position }}
                         </p>
-                        <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed flex-grow">
+                        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 leading-relaxed flex-grow line-clamp-3 sm:line-clamp-none">
                             {{ $member->bio ?: 'Penjelasan anggota dapat ditambahkan oleh admin.' }}
                         </p>
                     </div>
                 @endforeach
             </div>
         @else
-            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 border border-dashed border-gray-300 dark:border-slate-700 text-center">
+            <div class="bg-white dark:bg-slate-800 rounded-xl p-5 sm:p-8 border border-dashed border-gray-300 dark:border-slate-700 text-center">
                 <p class="text-sm text-gray-600 dark:text-gray-300">Belum ada data anggota. Silakan tambahkan dari dashboard admin pada menu Team Member.</p>
             </div>
         @endif
@@ -253,4 +249,6 @@ Tentang Kami
     @endif
     </div>
 </div>
+
+</div>{{-- end page-wrapper --}}
 @endsection

@@ -54,11 +54,11 @@ require __DIR__.'/auth.php';
 Route::prefix('cendikiaByRidwanullah')->name('admin.')->middleware(['auth', 'throttle:30,1'])->group(function () {
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('books', Admin\BookController::class);
-    Route::resource('posts', Admin\PostController::class);
-    Route::resource('services', Admin\ServiceController::class);
-    Route::resource('categories', Admin\CategoryController::class)->except(['show', 'create', 'edit']);
-    Route::resource('contacts', Admin\ContactController::class)->only(['index', 'show', 'destroy']);
+    Route::resource('books', Admin\BookController::class)->middleware('role:admin');
+    Route::resource('posts', Admin\PostController::class)->except(['show']);
+    Route::resource('services', Admin\ServiceController::class)->middleware('role:admin');
+    Route::resource('categories', Admin\CategoryController::class)->except(['show', 'create', 'edit'])->middleware('role:admin');
+    Route::resource('contacts', Admin\ContactController::class)->only(['index', 'show', 'destroy'])->middleware('role:admin');
     Route::resource('users', Admin\UserController::class)->except(['show', 'create', 'edit'])
         ->middleware('role:admin');
     Route::resource('menus', Admin\MenuController::class)->middleware('role:admin');
@@ -98,6 +98,6 @@ Route::prefix('cendikiaByRidwanullah')->name('admin.')->middleware(['auth', 'thr
     Route::get('audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit-logs.index')->middleware('role:admin');
     Route::get('audit-logs/{auditLog}', [Admin\AuditLogController::class, 'show'])->name('audit-logs.show')->middleware('role:admin');
 
-    Route::get('settings', [Admin\SettingController::class, 'index'])->name('settings.index');
-    Route::put('settings', [Admin\SettingController::class, 'update'])->name('settings.update');
+    Route::get('settings', [Admin\SettingController::class, 'index'])->name('settings.index')->middleware('role:admin');
+    Route::put('settings', [Admin\SettingController::class, 'update'])->name('settings.update')->middleware('role:admin');
 });

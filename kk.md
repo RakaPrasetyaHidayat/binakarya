@@ -34,4 +34,6 @@ SELAIN DARI YANG SAYA SEBUTKAN ANDA TIDAK BOLEH MENGANGGU PAGES LAIN DAN SISTEM 
 blogs page butuh perbaikan untuk menambahkan image dibawah Judul, Hapus Gap Putih, perkecil sedikit saja text bertulisan Bina Karya Cendikia 
 
 
-saya ingin anda debugging fitur upload file image dan pdf karena pada alert mengatakana sukses namun kenyataan nya file tidak sama sekali langsung terisimpan di database
+saya ingin anda debugging fitur upload file image dan pdf 
+karena pada alert mengatakana sukses namun kenyataan
+nya file tidak sama sekali langsung terisimpan di database

@@ -3,49 +3,23 @@
 @section('title', isset($service) ? 'Edit Layanan' : 'Tambah Layanan')
 
 @section('styles')
-<style>
-    .tox-tinymce { border-radius: 0.5rem !important; }
-    html.dark .tox { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-editor-header { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-toolbar__primary { background-color: rgb(31, 41, 55) !important; background-image: none !important; }
-    html.dark .tox-statusbar { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-statusbar__text-container { color: rgb(156, 163, 175) !important; }
-    html.dark .tox-edit-area__iframe { background-color: rgb(31, 41, 55) !important; }
-    html.dark .tox-mbtn__select-label, html.dark .tox-tbtn { color: rgb(209, 213, 219) !important; }
-    html.dark .tox-tbtn:hover { background-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-tbtn--enabled { background-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-split-button:hover { box-shadow: 0 0 0 1px rgb(55, 65, 81) inset !important; }
-    html.dark .tox-collection--list .tox-collection__item--active { background-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-collection--list .tox-collection__item--enabled { background-color: rgb(55, 65, 81) !important; color: rgb(59, 130, 246) !important; }
-    html.dark .tox-collection--toolbar .tox-collection__item--enabled { background-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-collection--toolbar .tox-collection__item--active { background-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-menu { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-collection__item-label { color: rgb(209, 213, 219) !important; }
-    html.dark .tox-collection__item-accessory { color: rgb(107, 114, 128) !important; }
-    html.dark .tox-collection__item--active .tox-collection__item-label { color: rgb(255, 255, 255) !important; }
-    html.dark .tox-dialog { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-dialog__header { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-dialog__title { color: rgb(243, 244, 246) !important; }
-    html.dark .tox-dialog__body { background-color: rgb(31, 41, 55) !important; }
-    html.dark .tox-dialog__footer { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-    html.dark .tox-label { color: rgb(209, 213, 219) !important; }
-    html.dark .tox-textfield { background-color: rgb(55, 65, 81) !important; border-color: rgb(75, 85, 99) !important; color: rgb(243, 244, 246) !important; }
-    html.dark .tox-textfield:focus { border-color: rgb(59, 130, 246) !important; }
-    html.dark .tox-listboxfield .tox-listbox--select { background-color: rgb(55, 65, 81) !important; border-color: rgb(75, 85, 99) !important; color: rgb(243, 244, 246) !important; }
-    html.dark .tox-button--naked { color: rgb(209, 213, 219) !important; }
-    html.dark .tox-button--naked:hover { background-color: rgb(55, 65, 81) !important; border-color: rgb(75, 85, 99) !important; }
-    html.dark .tox-button--secondary { background-color: rgb(55, 65, 81) !important; border-color: rgb(75, 85, 99) !important; color: rgb(243, 244, 246) !important; }
-    html.dark .tox-button--secondary:hover { background-color: rgb(75, 85, 99) !important; }
-    html.dark .tox-collection__group-heading { background-color: rgb(55, 65, 81) !important; color: rgb(156, 163, 175) !important; }
-    html.dark .tox-collection__item-caret svg { fill: rgb(209, 213, 219) !important; }
-    html.dark .tox-tbtn svg { fill: rgb(209, 213, 219) !important; }
-    html.dark .tox-tbtn--enabled svg { fill: rgb(59, 130, 246) !important; }
-    html.dark .tox-tbtn:hover svg { fill: rgb(255, 255, 255) !important; }
-    html.dark .tox-swatches__picker-btn svg { fill: rgb(209, 213, 219) !important; }
-</style>
+@include('admin.partials.tinymce-styles')
 @endsection
 
 @section('content')
+@php
+    $existingPlans = old('plans', isset($service) ? $service->plans->map(function ($plan) {
+        return [
+            'name' => $plan->name,
+            'subtitle' => $plan->subtitle,
+            'price' => (string) $plan->price,
+            'features_text' => is_array($plan->features) ? implode("\n", $plan->features) : '',
+            'is_popular' => (bool) $plan->is_popular,
+            'order' => (int) $plan->order,
+            'is_active' => (bool) $plan->is_active,
+        ];
+    })->values()->all() : []);
+@endphp
 <div class="max-w-3xl" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }">
     <div class="flex items-center gap-3 mb-6">
         <a href="{{ route('admin.services.index') }}" :class="darkMode ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'" class="transition">← Kembali</a>
@@ -100,8 +74,7 @@
 
         <div>
             <label :class="darkMode ? 'text-gray-300' : 'text-gray-700'" class="block text-sm font-medium mb-1">Konten Detail</label>
-            <textarea name="body" id="tinymce-body" class="hidden">{{ old('body', $service->body ?? '') }}</textarea>
-            <div id="editor-body" class="@error('body') border-red-400 @enderror rounded-lg overflow-hidden" style="min-height: 400px;"></div>
+            <textarea name="body" id="body-editor" class="@error('body') border-red-400 @enderror">{{ old('body', $service->body ?? '') }}</textarea>
             @error('body') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 
@@ -113,6 +86,47 @@
                        class="w-4 h-4 text-blue-600 rounded">
                 <span :class="darkMode ? 'text-gray-300' : 'text-gray-700'" class="text-sm font-medium">Aktif</span>
             </label>
+        </div>
+
+        <div :class="darkMode ? 'bg-slate-900/60 border-slate-700' : 'bg-blue-50/40 border-blue-100'" class="rounded-xl border p-4 space-y-4">
+            <div class="flex items-center justify-between gap-3">
+                <h3 :class="darkMode ? 'text-gray-100' : 'text-gray-800'" class="text-sm font-semibold">Paket Harga (Dinamis CMS)</h3>
+                <button type="button" id="add-plan-btn" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700 transition">
+                    + Tambah Paket
+                </button>
+            </div>
+            <p :class="darkMode ? 'text-gray-400' : 'text-gray-600'" class="text-xs">Setiap baris fitur dipisah Enter. Paket aktif akan tampil di halaman detail layanan.</p>
+            <div id="plans-container" class="space-y-4"></div>
+            <template id="plan-template">
+                <div class="plan-item rounded-xl border border-gray-200 dark:border-slate-700 p-4 space-y-3 bg-white dark:bg-slate-800/70">
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">Paket <span class="plan-number"></span></p>
+                        <button type="button" class="remove-plan-btn text-xs text-red-500 hover:text-red-600">Hapus</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="text" data-field="name" placeholder="Nama paket"
+                            class="w-full border rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 border-gray-300 dark:border-slate-600 text-gray-900 dark:text-gray-100">
+                        <input type="text" data-field="subtitle" placeholder="Subjudul (contoh: / A5)"
+                            class="w-full border rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 border-gray-300 dark:border-slate-600 text-gray-900 dark:text-gray-100">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <input type="number" min="0" step="1" data-field="price" placeholder="Harga"
+                            class="w-full border rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 border-gray-300 dark:border-slate-600 text-gray-900 dark:text-gray-100">
+                        <input type="number" min="0" data-field="order" placeholder="Urutan"
+                            class="w-full border rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 border-gray-300 dark:border-slate-600 text-gray-900 dark:text-gray-100">
+                        <label class="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+                            <input type="checkbox" data-field="is_popular" class="rounded border-gray-300 dark:border-slate-600">
+                            Tampilkan label Terbaik
+                        </label>
+                    </div>
+                    <textarea rows="4" data-field="features_text" placeholder="Fitur paket, satu baris satu fitur"
+                        class="w-full border rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 border-gray-300 dark:border-slate-600 text-gray-900 dark:text-gray-100"></textarea>
+                    <label class="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+                        <input type="checkbox" data-field="is_active" class="rounded border-gray-300 dark:border-slate-600" checked>
+                        Paket aktif
+                    </label>
+                </div>
+            </template>
         </div>
 
         <div :class="darkMode ? 'border-slate-700' : 'border-gray-100'" class="flex gap-3 pt-2 border-t">
@@ -150,94 +164,15 @@
         </div>
 </div>
 
-@php
-$tinymceApiKey = \App\Models\Setting::get('tinymce_api_key', '');
-$tinymceSrc = $tinymceApiKey 
-    ? 'https://cdn.tiny.cloud/1/' . $tinymceApiKey . '/tinymce/7/tinymce.min.js' 
-    : 'https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js';
-@endphp
+@include('admin.partials.tinymce-init', [
+    'editors' => [
+        ['selector' => '#body-editor', 'height' => 500, 'toolbar' => 'full'],
+    ]
+])
 
-<script src="{{ $tinymceSrc }}" referrerpolicy="origin"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const isDark = document.documentElement.classList.contains('dark');
-
-    // TinyMCE init
-    tinymce.init({
-        selector: '#editor-body',
-        setup: function(editor) {
-            editor.on('init', function() {
-                editor.setContent(document.getElementById('tinymce-body').value);
-            });
-        },
-        height: 500,
-        menubar: true,
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'help', 'wordcount', 'codesample',
-            'emoticons', 'pagebreak', 'nonbreaking', 'save', 'directionality'
-        ],
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | ' +
-                 'alignleft aligncenter alignright alignjustify | ' +
-                 'bullist numlist outdent indent | link image media table codesample | ' +
-                 'forecolor backcolor emoticons charmap | ' +
-                 'removeformat | help',
-        toolbar_mode: 'sliding',
-        content_style: isDark 
-            ? 'body { font-family: Inter, sans-serif; font-size: 16px; line-height: 1.6; color: #e5e7eb; background-color: #1f2937; }'
-            + ' h1,h2,h3,h4,h5,h6 { color: #f3f4f6; }'
-            + ' blockquote { border-left: 4px solid #7c3aed; background: rgba(124,58,237,0.1); padding: 1rem 1.5rem; margin: 1rem 0; }'
-            + ' a { color: #60a5fa; }'
-            + ' img { max-width: 100%; height: auto; border-radius: 0.5rem; }'
-            + ' table { border-collapse: collapse; width: 100%; }'
-            + ' th, td { border: 1px solid #4b5563; padding: 0.5rem; }'
-            + ' th { background-color: #374151; }'
-            : 'body { font-family: Inter, sans-serif; font-size: 16px; line-height: 1.6; color: #374151; }'
-            + ' blockquote { border-left: 4px solid #2563eb; background: rgba(37,99,235,0.08); padding: 1rem 1.5rem; margin: 1rem 0; }'
-            + ' img { max-width: 100%; height: auto; border-radius: 0.5rem; }'
-            + ' table { border-collapse: collapse; width: 100%; }'
-            + ' th, td { border: 1px solid #e5e7eb; padding: 0.5rem; }'
-            + ' th { background-color: #f9fafb; }',
-        skin: isDark ? 'oxide-dark' : 'oxide',
-        content_css: isDark ? 'dark' : 'default',
-        branding: false,
-        promotion: false,
-        images_upload_url: false,
-        automatic_uploads: false,
-        relative_urls: false,
-        remove_script_host: false,
-        convert_urls: true,
-        entity_encoding: 'raw',
-        valid_elements: '*[*]',
-        extended_valid_elements: 'script[src|async|defer|type|charset],style[type],link[rel|href|type]',
-        fontsize_formats: '8pt 10pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 32pt 36pt 48pt',
-        font_family_formats: 'Inter=Inter,sans-serif; Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace; Georgia=georgia,palatino,serif; Times New Roman=times new roman,times,serif; Verdana=verdana,geneva,sans-serif;',
-        block_formats: 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4; Heading 5=h5; Heading 6=h6; Preformatted=pre;',
-        codesample_languages: [
-            { text: 'HTML/XML', value: 'markup' },
-            { text: 'JavaScript', value: 'javascript' },
-            { text: 'CSS', value: 'css' },
-            { text: 'PHP', value: 'php' },
-            { text: 'Python', value: 'python' },
-            { text: 'Java', value: 'java' },
-            { text: 'C', value: 'c' },
-            { text: 'C++', value: 'cpp' },
-            { text: 'SQL', value: 'sql' },
-            { text: 'Bash', value: 'bash' }
-        ],
-        table_default_styles: { 'border-collapse': 'collapse', 'width': '100%' },
-        table_default_attributes: { 'border': '1' },
-        link_default_target: '_blank',
-        link_assume_external_targets: 'https',
-        resize: true,
-        min_height: 400,
-        max_height: 800,
-    });
-
-    document.querySelector('form').addEventListener('submit', function() {
-        document.getElementById('tinymce-body').value = tinymce.get('editor-body').getContent();
-    });
+    const initialPlans = @json($existingPlans);
 
     // Icon picker
     const iconInput = document.getElementById('icon-input');
@@ -315,6 +250,88 @@ document.addEventListener('DOMContentLoaded', function() {
             pickerModal.classList.add('hidden');
         }
     });
+
+    // Dynamic service plans builder
+    const plansContainer = document.getElementById('plans-container');
+    const planTemplate = document.getElementById('plan-template');
+    const addPlanBtn = document.getElementById('add-plan-btn');
+
+    function renderPlanIndexes() {
+        plansContainer.querySelectorAll('.plan-item').forEach((item, index) => {
+            item.querySelector('.plan-number').textContent = index + 1;
+            item.querySelectorAll('[data-field]').forEach((fieldEl) => {
+                const field = fieldEl.dataset.field;
+                if (fieldEl.type === 'checkbox') {
+                    fieldEl.name = `plans[${index}][${field}]`;
+                    if (field === 'is_active') {
+                        const hidden = item.querySelector('.is-active-hidden');
+                        hidden.name = `plans[${index}][${field}]`;
+                    }
+                    if (field === 'is_popular') {
+                        const hidden = item.querySelector('.is-popular-hidden');
+                        hidden.name = `plans[${index}][${field}]`;
+                    }
+                } else {
+                    fieldEl.name = `plans[${index}][${field}]`;
+                }
+            });
+        });
+    }
+
+    function addPlan(planData = {}) {
+        const fragment = planTemplate.content.cloneNode(true);
+        const planItem = fragment.querySelector('.plan-item');
+        const activeCheckbox = planItem.querySelector('[data-field="is_active"]');
+
+        const hiddenIsActive = document.createElement('input');
+        hiddenIsActive.type = 'hidden';
+        hiddenIsActive.value = '0';
+        hiddenIsActive.className = 'is-active-hidden';
+        planItem.appendChild(hiddenIsActive);
+
+        planItem.querySelectorAll('[data-field]').forEach((el) => {
+            const field = el.dataset.field;
+            if (el.type === 'checkbox') {
+                el.checked = Boolean(planData[field] ?? (field === 'is_active'));
+                if (field === 'is_popular') {
+                    const hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.value = '0';
+                    planItem.appendChild(hidden);
+                    hidden.className = 'is-popular-hidden';
+                }
+            } else {
+                el.value = planData[field] ?? '';
+            }
+        });
+
+        planItem.querySelector('.remove-plan-btn').addEventListener('click', () => {
+            planItem.remove();
+            renderPlanIndexes();
+        });
+
+        activeCheckbox.addEventListener('change', () => {
+            hiddenIsActive.value = activeCheckbox.checked ? '1' : '0';
+        });
+        hiddenIsActive.value = activeCheckbox.checked ? '1' : '0';
+
+        const popularCheckbox = planItem.querySelector('[data-field="is_popular"]');
+        const hiddenIsPopular = planItem.querySelector('.is-popular-hidden');
+        popularCheckbox.addEventListener('change', () => {
+            hiddenIsPopular.value = popularCheckbox.checked ? '1' : '0';
+        });
+        hiddenIsPopular.value = popularCheckbox.checked ? '1' : '0';
+
+        plansContainer.appendChild(planItem);
+        renderPlanIndexes();
+    }
+
+    addPlanBtn.addEventListener('click', () => addPlan());
+    if (Array.isArray(initialPlans) && initialPlans.length > 0) {
+        initialPlans.forEach((plan) => addPlan(plan));
+    } else {
+        addPlan();
+    }
 });
 </script>
 

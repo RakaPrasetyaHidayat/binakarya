@@ -52,10 +52,10 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {{-- Left Column: Cover + WhatsApp Button --}}
+            {{-- Left Column: Cover + Tombol Pembelian --}}
             <div class="lg:col-span-1">
                 {{-- Book Cover --}}
-                <div class="aspect-[3/4] rounded-lg overflow-hidden shadow-md transition-colors duration-300 mb-4"
+                <div class="aspect-[3/4] rounded-lg overflow-hidden shadow-md transition-colors duration-300 mb-3"
                     :class="darkMode ? 'bg-gray-800 shadow-none' : 'bg-gray-100'">
                     @if($book->cover_url)
                         <img src="{{ $book->cover_url }}" alt="{{ $book->title }}" class="w-full h-full object-cover">
@@ -72,16 +72,88 @@
                     @endif
                 </div>
 
-                {{-- WhatsApp Button Below Cover --}}
-                @if($book->wa_link)
-                <a href="{{ $book->wa_link }}" target="_blank" rel="noopener"
-                   class="flex items-center justify-center gap-2 w-full text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                    </svg>
-                    Beli via WhatsApp
-                </a>
-                @endif
+                {{-- Tombol Pembelian di bawah cover --}}
+                <div class="space-y-2">
+
+                    {{-- WhatsApp --}}
+                    @if($book->wa_link)
+                    <a href="{{ $book->wa_link }}" target="_blank" rel="noopener"
+                       class="flex items-center justify-center gap-2 w-full text-white font-semibold py-2.5 px-3 rounded-lg transition-colors duration-300 text-sm bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        Beli via WhatsApp
+                    </a>
+                    @endif
+
+                    {{-- Shopee --}}
+                    @if($book->shopee_url)
+                    <a href="{{ $book->shopee_url }}" target="_blank" rel="noopener"
+                       class="flex items-center justify-center gap-2 w-full text-white font-semibold py-2.5 px-3 rounded-lg transition-colors duration-300 text-sm bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700">
+                        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 6a4.5 4.5 0 119 0M3.75 8.25h16.5l-1.5 12H5.25l-1.5-12z"/></svg>
+                        Beli di Shopee
+                    </a>
+                    @endif
+
+                    {{-- Tokopedia --}}
+                    @if($book->tokopedia_url)
+                    <a href="{{ $book->tokopedia_url }}" target="_blank" rel="noopener"
+                       class="flex items-center justify-center gap-2 w-full text-white font-semibold py-2.5 px-3 rounded-lg transition-colors duration-300 text-sm bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800">
+                        <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>
+                        Beli di Tokopedia
+                    </a>
+                    @endif
+
+                    {{-- Custom URL --}}
+                    @if($book->custom_url)
+                    @php
+                        $customLabel = $book->custom_url_label;
+                        $customBg    = 'bg-primary-600 hover:bg-primary-700 dark:bg-primary-700 dark:hover:bg-primary-800';
+                        $customIcon  = '🛒';
+                        if (!$customLabel) {
+                            $host = strtolower(parse_url($book->custom_url, PHP_URL_HOST) ?? '');
+                            if (str_contains($host, 'lazada'))       { $customLabel = 'Beli di Lazada';     $customBg = 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800'; $customIcon = '🛍️'; }
+                            elseif (str_contains($host, 'bukalapak')){ $customLabel = 'Beli di Bukalapak';  $customBg = 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700'; }
+                            elseif (str_contains($host, 'blibli'))   { $customLabel = 'Beli di Blibli';     $customBg = 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700'; $customIcon = '🛍️'; }
+                            elseif (str_contains($host, 'amazon'))   { $customLabel = 'Beli di Amazon';     $customBg = 'bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700'; $customIcon = '📦'; }
+                            elseif (str_contains($host, 'wa.me') || str_contains($host, 'whatsapp')) { $customLabel = 'Beli via WhatsApp'; $customBg = 'bg-green-500 hover:bg-green-600'; $customIcon = '💬'; }
+                            else {
+                                $parts = explode('.', $host);
+                                $customLabel = 'Beli di ' . ucfirst($parts[count($parts) - 2] ?? $host);
+                            }
+                        }
+                        $customLabel = $customLabel ?: 'Beli Sekarang';
+                    @endphp
+                    <a href="{{ $book->custom_url }}" target="_blank" rel="noopener"
+                       class="flex items-center justify-center gap-2 w-full text-white font-semibold py-2.5 px-3 rounded-lg transition-colors duration-300 text-sm {{ $customBg }}">
+                        <span>{{ $customIcon }}</span> {{ $customLabel }}
+                    </a>
+                    @endif
+
+                    {{-- Preview PDF --}}
+                    @if($previewSource)
+                    <a href="{{ $previewSource }}" target="_blank" rel="noopener"
+                       class="flex items-center justify-center gap-2 w-full border font-semibold py-2.5 px-3 rounded-lg transition-colors duration-300 text-sm border-primary-600 text-primary-600 hover:bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-950">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                        {{ $isPdfPreview ? 'Baca / Preview PDF' : 'Lihat Preview' }}
+                    </a>
+                    @endif
+
+                    {{-- Download PDF --}}
+                    @if($book->pdf_file)
+                    <a href="{{ $book->pdf_url }}" download
+                       class="flex items-center justify-center gap-2 w-full border font-semibold py-2.5 px-3 rounded-lg transition-colors duration-300 text-sm border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-800">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Download PDF
+                    </a>
+                    @endif
+
+                </div>
             </div>
 
             {{-- Right Column: Details & Actions --}}
@@ -321,52 +393,6 @@
                     </div>
                 </div>
                 @endif
-
-                {{-- Buy Buttons (Stay in right column) --}}
-                <div class="space-y-3 pt-6">
-                    @if($book->shopee_url)
-                    <a href="{{ $book->shopee_url }}" target="_blank" rel="noopener"
-                       class="flex items-center justify-center gap-2 w-full text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700">
-                        🛒 Beli di Shopee
-                    </a>
-                    @endif
-
-                    @if($book->tokopedia_url)
-                    <a href="{{ $book->tokopedia_url }}" target="_blank" rel="noopener"
-                       class="flex items-center justify-center gap-2 w-full text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800">
-                        🛍️ Beli di Tokopedia
-                    </a>
-                    @endif
-
-                    @if($book->custom_url)
-                    <a href="{{ $book->custom_url }}" target="_blank" rel="noopener"
-                       class="flex items-center justify-center gap-2 w-full text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 bg-primary-600 hover:bg-primary-700 dark:bg-primary-700 dark:hover:bg-primary-800">
-                        {{ $book->custom_url_label ?? 'Beli Sekarang' }}
-                    </a>
-                    @endif
-
-                    @if($previewSource)
-                    <a href="{{ $previewSource }}" target="_blank" rel="noopener"
-                       class="flex items-center justify-center gap-2 w-full border-2 font-semibold py-3 px-4 rounded-lg transition-colors duration-300 border-primary-600 text-primary-600 hover:bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-950">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                        </svg>
-                        {{ $isPdfPreview ? 'Baca / Preview PDF' : 'Lihat Preview' }}
-                    </a>
-                    @endif
-
-                    @if($book->pdf_file)
-                    <a href="{{ $book->pdf_url }}" download
-                       class="flex items-center justify-center gap-2 w-full border-2 font-semibold py-3 px-4 rounded-lg transition-colors duration-300 border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        Download PDF
-                    </a>
-                    @endif
-                </div>
 
             </div>{{-- end right column --}}
         </div>{{-- end main grid --}}

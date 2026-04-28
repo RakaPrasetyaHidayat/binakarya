@@ -104,7 +104,7 @@
             }
         }
     </style>
-    <script>
+    <script nonce="{{ $cspNonce ?? '' }}">
         if (localStorage.getItem('darkMode') === 'true' || (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
@@ -141,18 +141,42 @@
             <div class="h-1 w-10 sm:w-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
         </div>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            window.addEventListener('load', function () {
+    <script nonce="{{ $cspNonce ?? '' }}">
+        (function () {
+            const hideLoader = () => {
                 const loader = document.getElementById('page-loader');
-                if (loader) {
-                    setTimeout(() => {
-                        loader.style.opacity = '0';
-                        setTimeout(() => loader.remove(), 500);
-                    }, 300);
+                if (!loader || loader.dataset.hidden === '1') {
+                    return;
                 }
+
+                loader.dataset.hidden = '1';
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    if (loader && loader.parentNode) {
+                        loader.remove();
+                    }
+                }, 500);
+            };
+
+            // Normal fast path.
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(hideLoader, 250);
             });
-        });
+
+            // Keep compatibility for heavier assets.
+            window.addEventListener('load', () => {
+                setTimeout(hideLoader, 100);
+            });
+
+            // Handle browser back/forward cache where `load` may not fire.
+            window.addEventListener('pageshow', () => {
+                setTimeout(hideLoader, 50);
+            });
+
+            // Hard failsafe: never keep loader forever.
+            setTimeout(hideLoader, 4000);
+        })();
     </script>
 
     {{-- Floating WhatsApp Icon --}}
@@ -365,14 +389,14 @@
 
         {{-- Mobile Menu --}}
         <div x-show="mobileMenuOpen" x-cloak x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 translate-y-0" x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0"
-            x-transition:leave-end="opacity-0 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-2"
             class="lg:hidden block fixed top-auto left-0 right-0 border-t shadow-2xl max-h-[calc(100vh-56px)] overflow-y-auto z-50"
             :class="darkMode ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-gray-200 text-slate-800'"
             @click.away="mobileMenuOpen = false">
-            <div class="max-w-7xl mx-auto px-4 sm:px-5 py-3 sm:py-4 space-y-2">
-                <div class="space-y-2 py-3 max-h-[calc(100vh-180px)] overflow-y-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-5 py-3 sm:py-4 space-y-1.5">
+                <div class="space-y-1 py-2 max-h-[calc(100vh-180px)] overflow-y-auto">
                     @php
                         $sortedMobileMenus = $publicMenus->sortBy(function($menu) {
                             return strtolower(trim($menu->label)) === 'beranda' ? -1 : $menu->order;
@@ -381,9 +405,9 @@
                     @forelse($sortedMobileMenus as $menu)
 
                         @if($menu->children->count() > 0)
-                            <div x-data="{ open: false }" class="border rounded-lg overflow-hidden shadow-sm" :class="darkMode ? 'border-slate-700 bg-slate-800/30' : 'border-gray-100 bg-gray-50/50'">
-                                <button @click="open = !open" class="w-full flex items-center justify-between p-3 sm:p-2.5 text-xs font-semibold uppercase tracking-wider">
-                                    <span :class="darkMode ? 'text-gray-100' : 'text-gray-900'" class="flex items-center gap-2">
+                            <div x-data="{ open: false }" class="rounded-xl overflow-hidden border" :class="darkMode ? 'border-slate-700 bg-slate-800/40' : 'border-gray-100 bg-gray-50/60'">
+                                <button @click="open = !open" class="w-full flex items-center justify-between px-4 py-3.5 text-sm font-semibold min-h-[48px]">
+                                    <span :class="darkMode ? 'text-gray-100' : 'text-gray-800'" class="flex items-center gap-2.5">
                                         @php
                                             $mobileDefaultIcons = [
                                                 'pelatihan akademik' => 'school-outline',
@@ -402,10 +426,10 @@
                                             $mMenuLabel = strtolower(trim($menu->label));
                                             $mIcon = $menu->icon ?? ($mobileDefaultIcons[$mMenuLabel] ?? 'cube-outline');
                                         @endphp
-                                        <ion-icon name="{{ $mIcon }}" class="text-base"></ion-icon>
+                                        <ion-icon name="{{ $mIcon }}" class="text-lg text-primary-500"></ion-icon>
                                         {{ $menu->label }}
                                     </span>
-                                    <svg class="w-3.5 h-3.5 transition-transform duration-300" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                                    <svg class="w-4 h-4 transition-transform duration-300 flex-shrink-0" :class="[open ? 'rotate-180' : '', darkMode ? 'text-gray-400' : 'text-gray-400']" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
                                 @php
                                     $mobileDefaultIcons = [
@@ -421,37 +445,28 @@
                                         'beranda' => 'home-outline',
                                     ];
                                 @endphp
-                                <div x-show="open" x-collapse class="px-2 pb-2 space-y-1 border-t pt-2" :class="darkMode ? 'border-slate-700' : 'border-gray-100'">
+                                <div x-show="open" x-collapse class="px-3 pb-3 space-y-1 border-t" :class="darkMode ? 'border-slate-700' : 'border-gray-100'">
                                     @foreach($menu->children as $child)
                                         @php
                                             $mChildLabel = strtolower(trim($child->label));
                                             $mIconName = $child->icon ?? ($mobileDefaultIcons[$mChildLabel] ?? 'cube-outline');
-                                            $childIconBg = 'bg-blue-50';
-                                            $childIconDarkBg = 'dark:bg-blue-900/30';
-                                            $childIconText = 'text-primary-600';
-                                            $childIconDarkText = 'dark:text-primary-400';
-                                            
-                                            $iconConfig = ['bg' => 'bg-blue-50', 'dark_bg' => 'dark:bg-blue-900/30', 'text' => 'text-blue-600', 'dark_text' => 'dark:text-blue-400'];
-                                            $colorConfig = $iconConfig;
                                         @endphp
                                         <a href="{{ $child->is_external ? $child->url : url($child->url) }}" 
                                            @if($child->target == '_blank') target="_blank" @endif
                                            @click="mobileMenuOpen = false"
-                                           class="flex items-center gap-2.5 p-2.5 sm:p-2 rounded-lg text-xs transition-all duration-300"
-                                           :class="darkMode ? 'text-gray-200 hover:text-white hover:bg-slate-700/50' : 'text-gray-700 hover:text-primary-600 hover:bg-blue-50'">
-                                            <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 {{ $colorConfig['bg'] }} {{ $colorConfig['dark_bg'] }}">
+                                           class="flex items-center gap-3 px-3 py-3 rounded-lg text-sm transition-all min-h-[44px]"
+                                           :class="darkMode ? 'text-gray-300 hover:text-white hover:bg-slate-700/60' : 'text-gray-700 hover:text-primary-600 hover:bg-blue-50'">
+                                            <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-blue-50 dark:bg-blue-900/30">
                                                 @if($child->thumbnail)
                                                     <img src="{{ asset('storage/' . $child->thumbnail) }}" alt="" class="w-4 h-4 object-contain">
                                                 @else
-                                                    <ion-icon name="{{ $mIconName }}" class="text-sm {{ $colorConfig['text'] }} {{ $colorConfig['dark_text'] }}"></ion-icon>
+                                                    <ion-icon name="{{ $mIconName }}" class="text-sm text-primary-600 dark:text-primary-400"></ion-icon>
                                                 @endif
                                             </span>
-                                            <span class="truncate flex items-center gap-1">
-                                                {{ $child->label }}
-                                                @if($child->is_external || $child->target == '_blank')
-                                                    <ion-icon name="open-outline" class="text-[10px] opacity-50 flex-shrink-0"></ion-icon>
-                                                @endif
-                                            </span>
+                                            <span class="flex-1 truncate">{{ $child->label }}</span>
+                                            @if($child->is_external || $child->target == '_blank')
+                                                <ion-icon name="open-outline" class="text-xs opacity-40 flex-shrink-0"></ion-icon>
+                                            @endif
                                         </a>
                                     @endforeach
                                 </div>
@@ -460,68 +475,60 @@
                             <a href="{{ $menu->is_external ? $menu->url : url($menu->url) }}" 
                                @if($menu->target == '_blank') target="_blank" @endif
                                @click="mobileMenuOpen = false"
-                               class="flex items-center gap-2.5 p-3 sm:p-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all"
-                               :class="darkMode ? 'text-gray-100 hover:bg-slate-700 hover:text-primary-400' : 'text-gray-800 hover:bg-blue-50 hover:text-primary-600'">
+                               class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all min-h-[48px]"
+                               :class="darkMode ? 'text-gray-100 hover:bg-slate-800 hover:text-primary-400' : 'text-gray-800 hover:bg-gray-50 hover:text-primary-600'">
                                 @php
                                     $mMenuLabel = strtolower(trim($menu->label));
                                     $mIcon = $menu->icon ?? ($mobileDefaultIcons[$mMenuLabel] ?? 'cube-outline');
                                 @endphp
-                                <ion-icon name="{{ $mIcon }}" class="text-base"></ion-icon>
+                                <ion-icon name="{{ $mIcon }}" class="text-lg text-primary-500 flex-shrink-0"></ion-icon>
                                 {{ $menu->label }}
                             </a>
                         @endif
                     @empty
-                        {{-- Fallback navigation --}}
-                        <a href="{{ route('homepage') }}" @click="mobileMenuOpen = false" class="flex items-center gap-2.5 p-3 sm:p-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider" :class="darkMode ? 'text-gray-100 hover:bg-slate-700' : 'text-gray-800 hover:bg-blue-50'">
-                            <ion-icon name="home-outline" class="text-base"></ion-icon>
-                            Beranda
+                        <a href="{{ route('homepage') }}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold min-h-[48px]" :class="darkMode ? 'text-gray-100 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50'">
+                            <ion-icon name="home-outline" class="text-lg text-primary-500"></ion-icon> Beranda
                         </a>
-                        <a href="{{ route('about') }}" @click="mobileMenuOpen = false" class="flex items-center gap-2.5 p-3 sm:p-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider" :class="darkMode ? 'text-gray-100 hover:bg-slate-700' : 'text-gray-800 hover:bg-blue-50'">
-                            <ion-icon name="information-circle-outline" class="text-base"></ion-icon>
-                            Tentang Kami
+                        <a href="{{ route('about') }}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold min-h-[48px]" :class="darkMode ? 'text-gray-100 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50'">
+                            <ion-icon name="information-circle-outline" class="text-lg text-primary-500"></ion-icon> Tentang Kami
                         </a>
-                        <a href="{{ route('books.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-2.5 p-3 sm:p-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider" :class="darkMode ? 'text-gray-100 hover:bg-slate-700' : 'text-gray-800 hover:bg-blue-50'">
-                            <ion-icon name="book-outline" class="text-base"></ion-icon>
-                            Katalog Buku
+                        <a href="{{ route('books.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold min-h-[48px]" :class="darkMode ? 'text-gray-100 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50'">
+                            <ion-icon name="book-outline" class="text-lg text-primary-500"></ion-icon> Katalog Buku
                         </a>
-                        <a href="{{ route('blog.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-2.5 p-3 sm:p-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider" :class="darkMode ? 'text-gray-100 hover:bg-slate-700' : 'text-gray-800 hover:bg-blue-50'">
-                            <ion-icon name="newspaper-outline" class="text-base"></ion-icon>
-                            Blog Terbaru
+                        <a href="{{ route('blog.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold min-h-[48px]" :class="darkMode ? 'text-gray-100 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50'">
+                            <ion-icon name="newspaper-outline" class="text-lg text-primary-500"></ion-icon> Blog
                         </a>
-                        <a href="{{ route('contact') }}" @click="mobileMenuOpen = false" class="flex items-center gap-2.5 p-3 sm:p-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider" :class="darkMode ? 'text-gray-100 hover:bg-slate-700' : 'text-gray-800 hover:bg-blue-50'">
-                            <ion-icon name="call-outline" class="text-base"></ion-icon>
-                            Kontak Kami
+                        <a href="{{ route('contact') }}" @click="mobileMenuOpen = false" class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold min-h-[48px]" :class="darkMode ? 'text-gray-100 hover:bg-slate-800' : 'text-gray-800 hover:bg-gray-50'">
+                            <ion-icon name="call-outline" class="text-lg text-primary-500"></ion-icon> Kontak
                         </a>
                     @endforelse
                 </div>
 
-                {{-- Mobile WhatsApp CTA --}}
-                <div class="pt-3 border-t space-y-3 mt-3" :class="darkMode ? 'border-slate-800' : 'border-gray-100'">
+                {{-- Mobile Bottom Actions --}}
+                <div class="pt-3 border-t space-y-2.5" :class="darkMode ? 'border-slate-800' : 'border-gray-100'">
                     @if($siteSettings->get('wa_number'))
                         <a href="https://wa.me/{{ $siteSettings->get('wa_number') }}" target="_blank" rel="noopener"
-                            class="cta-center flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold uppercase tracking-wider px-4 py-3 rounded-lg shadow-lg shadow-green-600/20 active:scale-95 transition-all w-full"
-                            style="display:flex;align-items:center;justify-content:center;">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            class="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 py-3 rounded-xl shadow-sm active:scale-95 transition-all w-full min-h-[48px]">
+                            <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                             </svg>
-                            WhatsApp
+                            Chat WhatsApp
                         </a>
                     @endif
 
-                    <div class="flex items-center justify-between px-2 py-2 rounded-lg" :class="darkMode ? 'bg-slate-800/30' : 'bg-gray-50'">
-                        <span class="text-xs font-semibold" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">Mode Gelap</span>
+                    <div class="flex items-center justify-between px-3 py-2.5 rounded-xl" :class="darkMode ? 'bg-slate-800/50' : 'bg-gray-50'">
+                        <span class="text-sm font-medium" :class="darkMode ? 'text-gray-300' : 'text-gray-600'">Mode Gelap</span>
                         <button @click="darkMode = !darkMode" 
-                                class="w-10 h-5 rounded-full transition-all duration-300 relative flex-shrink-0"
+                                class="w-11 h-6 rounded-full transition-all duration-300 relative flex-shrink-0"
                                 :class="darkMode ? 'bg-primary-600' : 'bg-gray-300'">
-                            <div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full transition-transform duration-300 flex items-center justify-center shadow-sm"
-                                :class="darkMode ? 'translate-x-5 bg-white text-primary-600' : 'translate-x-0 bg-white text-gray-400'">
-                                <ion-icon :name="darkMode ? 'moon' : 'sunny'" class="text-[10px]"></ion-icon>
+                            <div class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform duration-300 shadow-sm"
+                                :class="darkMode ? 'translate-x-5' : 'translate-x-0'">
                             </div>
                         </button>
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
     </header>
 
     <main class="relative min-h-screen w-full overflow-x-hidden pt-0">

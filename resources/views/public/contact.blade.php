@@ -3,21 +3,19 @@
 @section('title', $siteSettings->get('contact_header_title', 'Kontak'))
 
 @section('content')
-{{-- Page wrapper — navbar clearance shares same bg as header --}}
-<div class="min-h-screen bg-gray-50 dark:bg-slate-800 transition-colors duration-300">
+<div class="page-wrapper">
 
-{{-- Header --}}
-<section class="pt-24 sm:pt-32 lg:pt-40 pb-12 sm:pb-16 lg:pb-20 transition-colors duration-300">
-
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <span class="text-xs uppercase tracking-[0.2em] text-primary-600 dark:text-primary-400 font-bold mb-4 block transition-colors bg-primary-50 dark:bg-primary-900/30 w-fit mx-auto px-4 py-1.5 rounded-full">{{ $siteSettings->get('contact_header_tagline', 'Hubungi Kami') }}</span>
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-6 transition-colors">{{ $siteSettings->get('contact_header_title', 'Kontak') }}</h1>
-        <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors leading-relaxed">{{ $siteSettings->get('contact_header_description', 'Tertarik untuk bekerja sama atau memiliki pertanyaan? Kami siap membantu dan merespons setiap inquiry Anda.') }}</p>
+    {{-- Page Header --}}
+    <div class="page-header">
+        <div class="page-header-inner">
+            <span class="page-header-tagline">{{ $siteSettings->get('contact_header_tagline', 'Hubungi Kami') }}</span>
+            <h1 class="page-header-title">{{ $siteSettings->get('contact_header_title', 'Kontak') }}</h1>
+            <p class="page-header-desc max-w-2xl">{{ $siteSettings->get('contact_header_description', 'Tertarik untuk bekerja sama atau memiliki pertanyaan? Kami siap membantu dan merespons setiap inquiry Anda.') }}</p>
+        </div>
     </div>
-</section>
 
 {{-- Contact Content --}}
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
         {{-- Contact Form --}}
         <div class="lg:col-span-2">
@@ -185,19 +183,19 @@
 </div>
 
 {{-- CTA Section --}}
-<section class="bg-gradient-to-r from-primary-600 to-primary-700 py-12 sm:py-16 lg:py-20 transition-colors">
+<section class="bg-gradient-to-r from-primary-600 to-primary-700 py-12 sm:py-16 transition-colors">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold mb-4 text-white uppercase tracking-tight">{{ $siteSettings->get('contact_cta_title', 'Siap untuk Berkolaborasi?') }}</h2>
-        <p class="text-base sm:text-lg text-white/95 max-w-2xl mx-auto mb-8 leading-relaxed">{{ $siteSettings->get('contact_cta_description', 'Hubungi kami sekarang melalui salah satu saluran komunikasi di bawah ini. Tim kami siap merespons pertanyaan Anda dengan cepat.') }}</p>
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center w-full">
+        <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 text-white">{{ $siteSettings->get('contact_cta_title', 'Siap untuk Berkolaborasi?') }}</h2>
+        <p class="text-sm sm:text-base text-white/95 max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed">{{ $siteSettings->get('contact_cta_description', 'Hubungi kami sekarang melalui salah satu saluran komunikasi di bawah ini. Tim kami siap merespons pertanyaan Anda dengan cepat.') }}</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
             @if($siteSettings->get('email'))
-            <a href="mailto:{{ $siteSettings->get('email') }}" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-primary-600 hover:bg-gray-100 text-sm sm:text-base font-medium px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg transition duration-200">
+            <a href="mailto:{{ $siteSettings->get('email') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-primary-600 hover:bg-gray-100 text-sm font-semibold px-6 py-2.5 rounded-lg transition duration-200">
                 <ion-icon name="mail-outline" class="text-lg"></ion-icon>
                 {{ $siteSettings->get('contact_cta_email_text', 'Kirim Email') }}
             </a>
             @endif
             @if($siteSettings->get('wa_number'))
-            <a href="https://wa.me/{{ $siteSettings->get('wa_number') }}" target="_blank" rel="noopener" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-500 text-white hover:bg-green-600 text-sm sm:text-base font-medium px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg transition duration-200">
+            <a href="https://wa.me/{{ $siteSettings->get('wa_number') }}" target="_blank" rel="noopener" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-green-500 text-white hover:bg-green-600 text-sm font-semibold px-6 py-2.5 rounded-lg transition duration-200">
                 <ion-icon name="logo-whatsapp" class="text-lg"></ion-icon>
                 {{ $siteSettings->get('contact_cta_whatsapp_text', 'Hubungi WhatsApp') }}
             </a>
@@ -206,6 +204,6 @@
     </div>
 </section>
 
-</div>{{-- end page wrapper --}}
+</div>
 @endsection
 

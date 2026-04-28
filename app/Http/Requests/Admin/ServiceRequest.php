@@ -17,6 +17,14 @@ class ServiceRequest extends FormRequest
             'icon'      => 'nullable|string|regex:/^[\s\-a-zA-Z0-9\p{L}\p{M}\p{Emoji}]*$/u|max:100',
             'order'     => 'integer|min:0|max:999',
             'is_active' => 'boolean',
+            'plans'     => 'nullable|array',
+            'plans.*.name' => 'nullable|string|max:255',
+            'plans.*.subtitle' => 'nullable|string|max:255',
+            'plans.*.price' => 'nullable|numeric|min:0|max:999999999',
+            'plans.*.features_text' => 'nullable|string|max:5000',
+            'plans.*.is_popular' => 'nullable|boolean',
+            'plans.*.order' => 'nullable|integer|min:0|max:999',
+            'plans.*.is_active' => 'nullable|boolean',
         ];
     }
 }

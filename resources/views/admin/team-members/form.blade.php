@@ -3,22 +3,7 @@
 @section('title', isset($teamMember) ? 'Edit Anggota' : 'Tambah Anggota')
 
 @section('styles')
-<style>
-.tox-tinymce { border-radius: 0.5rem !important; }
-html.dark .tox { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-html.dark .tox-editor-header { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-html.dark .tox-toolbar__primary { background-color: rgb(31, 41, 55) !important; background-image: none !important; }
-html.dark .tox-statusbar { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-html.dark .tox-statusbar__text-container { color: rgb(156, 163, 175) !important; }
-html.dark .tox-edit-area__iframe { background-color: rgb(31, 41, 55) !important; }
-html.dark .tox-mbtn__select-label, html.dark .tox-tbtn { color: rgb(209, 213, 219) !important; }
-html.dark .tox-tbtn:hover, html.dark .tox-tbtn--enabled { background-color: rgb(55, 65, 81) !important; }
-html.dark .tox-menu, html.dark .tox-dialog, html.dark .tox-dialog__header, html.dark .tox-dialog__body, html.dark .tox-dialog__footer { background-color: rgb(31, 41, 55) !important; border-color: rgb(55, 65, 81) !important; }
-html.dark .tox-dialog__title { color: rgb(243, 244, 246) !important; }
-html.dark .tox-label { color: rgb(209, 213, 219) !important; }
-html.dark .tox-textfield, html.dark .tox-listboxfield .tox-listbox--select { background-color: rgb(55, 65, 81) !important; border-color: rgb(75, 85, 99) !important; color: rgb(243, 244, 246) !important; }
-html.dark .tox-button--secondary { background-color: rgb(55, 65, 81) !important; border-color: rgb(75, 85, 99) !important; color: rgb(243, 244, 246) !important; }
-</style>
+@include('admin.partials.tinymce-styles')
 @endsection
 
 @section('content')
@@ -72,8 +57,7 @@ html.dark .tox-button--secondary { background-color: rgb(55, 65, 81) !important;
         {{-- Bio --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">Bio</label>
-            <textarea name="bio" id="tinymce-bio" class="hidden">{{ old('bio', $teamMember->bio ?? '') }}</textarea>
-            <div id="editor-bio" class="rounded-xl overflow-hidden" style="min-height: 250px;"></div>
+            <textarea name="bio" id="bio-editor">{{ old('bio', $teamMember->bio ?? '') }}</textarea>
         </div>
         <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">LinkedIn URL</label>
@@ -121,50 +105,9 @@ html.dark .tox-button--secondary { background-color: rgb(55, 65, 81) !important;
     </form>
 </div>
 
-@php
-$tinymceApiKey = \App\Models\Setting::get('tinymce_api_key', '');
-$tinymceSrc = $tinymceApiKey 
-    ? 'https://cdn.tiny.cloud/1/' . $tinymceApiKey . '/tinymce/7/tinymce.min.js' 
-    : 'https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js';
-@endphp
-
-<script src="{{ $tinymceSrc }}" referrerpolicy="origin"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const isDark = document.documentElement.classList.contains('dark');
-    
-    tinymce.init({
-        selector: '#editor-bio',
-        setup: function(editor) {
-            editor.on('init', function() {
-                editor.setContent(document.getElementById('tinymce-bio').value);
-            });
-        },
-        height: 300,
-        menubar: false,
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'charmap',
-            'anchor', 'searchreplace', 'visualblocks', 'code',
-            'insertdatetime', 'table', 'help', 'wordcount',
-            'emoticons'
-        ],
-        toolbar: 'undo redo | blocks | bold italic underline | ' +
-                 'alignleft aligncenter alignright | ' +
-                 'bullist numlist | link | removeformat',
-        skin: isDark ? 'oxide-dark' : 'oxide',
-        content_css: isDark ? 'dark' : 'default',
-        branding: false,
-        promotion: false,
-        relative_urls: false,
-        remove_script_host: false,
-        convert_urls: true,
-        entity_encoding: 'raw',
-        valid_elements: '*[*]',
-    });
-
-    document.querySelector('form').addEventListener('submit', function() {
-        document.getElementById('tinymce-bio').value = tinymce.get('editor-bio').getContent();
-    });
-});
-</script>
+@include('admin.partials.tinymce-init', [
+    'editors' => [
+        ['selector' => '#bio-editor', 'height' => 280, 'toolbar' => 'minimal'],
+    ]
+])
 @endsection

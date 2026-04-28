@@ -205,7 +205,7 @@
                     </div>
 
                     {{-- Author Box --}}
-                    <div class="mt-8 p-6 rounded-xl border transition-colors duration-300"
+                    <div class="mt-8 mb-12 p-6 rounded-xl border transition-colors duration-300"
                         :class="darkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-gray-50 border-gray-200'">
                         <div class="flex items-start gap-4">
                             <div class="w-14 h-14 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold text-xl flex-shrink-0">

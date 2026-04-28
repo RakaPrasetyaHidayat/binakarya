@@ -28,12 +28,13 @@ class SecurityHeaders
 
         // Content Security Policy (CSP)
         $csp = "default-src 'self'; ";
-        $csp .= "script-src 'self' 'nonce-{$nonce}' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com http://127.0.0.1:5173 localhost:5173; ";
-        $csp .= "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net http://127.0.0.1:5173 localhost:5173; ";
-        $csp .= "img-src 'self' data: https://images.unsplash.com https://ui-avatars.com https://*.basecamp.com http://127.0.0.1:5173 localhost:5173; ";
-        $csp .= "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net http://127.0.0.1:5173 localhost:5173; ";
+        $csp .= "script-src 'self' 'nonce-{$nonce}' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://*.unpkg.com https://cdnjs.cloudflare.com https://cdn.tiny.cloud http://127.0.0.1:5173 localhost:5173; ";
+        $csp .= "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://unpkg.com https://*.unpkg.com https://cdn.tiny.cloud http://127.0.0.1:5173 localhost:5173; ";
+        $csp .= "img-src 'self' data: blob: https://images.unsplash.com https://ui-avatars.com https://*.basecamp.com https://cdn.tiny.cloud https://unpkg.com https://*.unpkg.com http://127.0.0.1:5173 localhost:5173; ";
+        $csp .= "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net https://unpkg.com https://*.unpkg.com https://cdn.tiny.cloud http://127.0.0.1:5173 localhost:5173; ";
         $csp .= "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://www.w3.org blob:; ";
-        $csp .= "connect-src 'self' ws://127.0.0.1:5173 http://127.0.0.1:5173 ws://localhost:5173 http://localhost:5173 https://unpkg.com https://*.unpkg.com https://cdn.jsdelivr.net https://*.jsdelivr.net; ";
+        $csp .= "connect-src 'self' ws://127.0.0.1:5173 http://127.0.0.1:5173 ws://localhost:5173 http://localhost:5173 https://unpkg.com https://*.unpkg.com https://cdn.jsdelivr.net https://*.jsdelivr.net https://cdn.tiny.cloud; ";
+        $csp .= "worker-src 'self' blob:; ";
         
         $response->headers->set('Content-Security-Policy', $csp);
         

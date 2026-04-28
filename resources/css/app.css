@@ -85,6 +85,75 @@
     }
 }
 
+/* ============================================================
+   PAGE HEADER — consistent across all public pages
+   ============================================================ */
+.page-header {
+    @apply pt-20 sm:pt-24 lg:pt-28 pb-7 sm:pb-9 lg:pb-11
+           border-b transition-colors duration-300
+           bg-white border-gray-100
+           dark:bg-gray-800 dark:border-gray-700;
+}
+
+.page-header-inner {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.page-header-tagline {
+    @apply text-[11px] uppercase tracking-[0.2em] font-semibold mb-2 block transition-colors
+           text-gray-500 dark:text-gray-400;
+}
+
+.page-header-title {
+    @apply text-2xl sm:text-3xl lg:text-4xl font-bold mb-2.5 transition-colors leading-tight
+           text-gray-900 dark:text-white;
+}
+
+.page-header-desc {
+    @apply text-sm sm:text-base leading-relaxed transition-colors
+           text-gray-600 dark:text-gray-300;
+}
+
+/* ============================================================
+   SECTION WRAPPER — consistent page background
+   ============================================================ */
+.page-wrapper {
+    @apply min-h-screen transition-colors duration-300
+           bg-white dark:bg-slate-900;
+}
+
+/* ============================================================
+   CARD GRID — consistent responsive grid
+   ============================================================ */
+.card-grid-2 {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6;
+}
+
+.card-grid-3 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6;
+}
+
+/* ============================================================
+   MOBILE NAV — better touch targets
+   ============================================================ */
+@media (max-width: 1023px) {
+    /* Ensure mobile menu items have adequate touch targets */
+    .mobile-nav-item {
+        min-height: 44px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE TYPOGRAPHY HELPERS
+   ============================================================ */
+.text-responsive-xs  { @apply text-xs sm:text-sm; }
+.text-responsive-sm  { @apply text-sm sm:text-base; }
+.text-responsive-base{ @apply text-base sm:text-lg; }
+.text-responsive-lg  { @apply text-lg sm:text-xl lg:text-2xl; }
+.text-responsive-xl  { @apply text-xl sm:text-2xl lg:text-3xl; }
+.text-responsive-2xl { @apply text-2xl sm:text-3xl lg:text-4xl; }
+.text-responsive-3xl { @apply text-3xl sm:text-4xl lg:text-5xl; }
+
 @layer utilities {
     .line-clamp-2 {
         display: -webkit-box;
