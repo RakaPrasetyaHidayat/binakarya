@@ -47,13 +47,25 @@ class Book extends Model
 
     public function getPdfUrlAttribute(): ?string
     {
-        return $this->pdf_file ? asset('storage/' . $this->pdf_file) : null;
+        if (!$this->pdf_file) {
+            return null;
+        }
+
+        if (preg_match('/^https?:\/\//i', $this->pdf_file)) {
+            return $this->pdf_file;
+        }
+
+        return asset('storage/' . $this->pdf_file);
     }
 
     public function getPreviewUrlAttribute(): ?string
     {
         // Priority: uploaded preview_file → raw external preview_url
         if ($this->preview_file) {
+            if (preg_match('/^https?:\/\//i', $this->preview_file)) {
+                return $this->preview_file;
+            }
+
             return asset('storage/' . $this->preview_file);
         }
         
@@ -68,7 +80,11 @@ class Book extends Model
     public function getWaLinkAttribute(): ?string
     {
         if (!$this->wa_number) return null;
+        $normalizedWa = preg_replace('/\D+/', '', (string) $this->wa_number);
+        if ($normalizedWa === '') {
+            return null;
+        }
         $msg = urlencode("Halo, saya ingin membeli buku: {$this->title}");
-        return "https://wa.me/{$this->wa_number}?text={$msg}";
+        return "https://wa.me/{$normalizedWa}?text={$msg}";
     }
 }

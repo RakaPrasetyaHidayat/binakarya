@@ -32,3 +32,6 @@ Buat semua paragraf yang di input lewat admin dashboard bisa menggunakan TINYMCE
 SELAIN DARI YANG SAYA SEBUTKAN ANDA TIDAK BOLEH MENGANGGU PAGES LAIN DAN SISTEM LAIN YANG TIDAK BERHUBUNGAN DENGAN APA YANG SAYA INGIN RUBAH
 
 blogs page butuh perbaikan untuk menambahkan image dibawah Judul, Hapus Gap Putih, perkecil sedikit saja text bertulisan Bina Karya Cendikia 
+
+
+saya ingin anda debugging fitur upload file image dan pdf karena pada alert mengatakana sukses namun kenyataan nya file tidak sama sekali langsung terisimpan di database

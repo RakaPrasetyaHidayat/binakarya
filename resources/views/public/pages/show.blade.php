@@ -31,9 +31,17 @@
                         <div class="w-20 h-1.5 bg-primary-600 dark:bg-primary-500 mx-auto rounded-full"></div>
                     </header>
 
-                    <div class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-poppins prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-600 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-a:no-underline hover:prose-a:underline transition-colors">
-                        {!! $page->content !!}
-                    </div>
+                    @if($page->isBuilderMode() && !empty($builderBlocks))
+                        <div class="space-y-8">
+                            @foreach($builderBlocks as $block)
+                                @includeIf('public.pages.blocks.' . ($block['type'] ?? ''), ['block' => $block])
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-poppins prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-600 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-a:no-underline hover:prose-a:underline transition-colors">
+                            {!! $page->content !!}
+                        </div>
+                    @endif
                 </div>
 
                 <div class="bg-gray-50/50 dark:bg-slate-900/30 px-6 py-6 sm:px-12 border-t border-gray-100 dark:border-slate-700/50 flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -50,4 +58,16 @@
     </div>
 
 </div>
+
+@if($page->isBuilderMode() && filled($page->custom_css))
+    <style>
+        {!! $page->custom_css !!}
+    </style>
+@endif
+
+@if($page->isBuilderMode() && filled($page->custom_js))
+    <script nonce="{{ $cspNonce ?? '' }}">
+        {!! $page->custom_js !!}
+    </script>
+@endif
 @endsection

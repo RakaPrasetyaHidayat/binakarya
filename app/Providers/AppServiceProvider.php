@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Models\Post;
 use App\Models\Book;
+use App\Models\Page;
 use App\Models\Service;
 use App\Policies\PostPolicy;
 use App\Policies\BookPolicy;
+use App\Policies\PagePolicy;
 use App\Policies\ServicePolicy;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -48,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
          */
         Gate::policy(Post::class, PostPolicy::class);
         Gate::policy(Book::class, BookPolicy::class);
+        Gate::policy(Page::class, PagePolicy::class);
         Gate::policy(Service::class, ServicePolicy::class);
 
         /**

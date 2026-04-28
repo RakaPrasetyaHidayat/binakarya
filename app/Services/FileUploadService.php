@@ -41,45 +41,99 @@ class FileUploadService
      */
     public function upload(UploadedFile $file, string $directory): string
     {
-        // Support subdirectories like pages/homepage — check top-level key
         $topLevel = explode('/', $directory)[0];
 
+        \Log::info('Starting file upload', [
+            'original_name' => $file->getClientOriginalName(),
+            'size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'directory' => $directory,
+            'top_level' => $topLevel
+        ]);
+
         if (!isset(self::ALLOWED_MIMES[$topLevel])) {
+            \Log::warning('Invalid upload directory', ['directory' => $directory]);
             throw ValidationException::withMessages([
-                'file' => 'Invalid upload directory.'
+                'file' => "Upload directory '{$directory}' tidak diizinkan."
             ]);
         }
 
         $maxSize = self::MAX_FILE_SIZES[$topLevel] ?? 2048;
-        if ($file->getSize() > $maxSize * 1024) {
+        $fileSizeKB = $file->getSize() / 1024;
+
+        if ($fileSizeKB > $maxSize) {
+            \Log::warning('File too large', [
+                'size_kb' => $fileSizeKB,
+                'max_size_kb' => $maxSize,
+                'file' => $file->getClientOriginalName()
+            ]);
             throw ValidationException::withMessages([
-                'file' => "File size must not exceed {$maxSize}KB."
+                'file' => "Ukuran file maksimal {$maxSize}KB. File Anda: " . round($fileSizeKB, 2) . "KB"
             ]);
         }
 
-        if (!in_array($file->getMimeType(), self::ALLOWED_MIMES[$topLevel])) {
+        $mimeType = $file->getMimeType();
+        if (!in_array($mimeType, self::ALLOWED_MIMES[$topLevel])) {
+            \Log::warning('Invalid MIME type', [
+                'mime_type' => $mimeType,
+                'allowed' => self::ALLOWED_MIMES[$topLevel],
+                'file' => $file->getClientOriginalName()
+            ]);
             throw ValidationException::withMessages([
-                'file' => 'Invalid file type.'
+                'file' => "Tipe file '{$mimeType}' tidak diizinkan. Tipe yang diizinkan: " . implode(', ', self::ALLOWED_MIMES[$topLevel])
             ]);
         }
 
         $extension = strtolower($file->getClientOriginalExtension());
         if (!in_array($extension, self::ALLOWED_EXTENSIONS[$topLevel])) {
+            \Log::warning('Invalid file extension', [
+                'extension' => $extension,
+                'allowed' => self::ALLOWED_EXTENSIONS[$topLevel],
+                'file' => $file->getClientOriginalName()
+            ]);
             throw ValidationException::withMessages([
-                'file' => 'Invalid file extension.'
+                'file' => "Ekstensi file '.$extension' tidak diizinkan. Ekstensi yang diizinkan: " . implode(', ', self::ALLOWED_EXTENSIONS[$topLevel])
             ]);
         }
 
-        $filename = Str::uuid() . '.' . $extension;
-        $path = $file->storeAs($directory, $filename, 'public');
+        try {
+            $filename = Str::uuid() . '.' . $extension;
+            $path = $file->storeAs($directory, $filename, 'public');
 
-        if (!$path) {
-            throw ValidationException::withMessages([
-                'file' => 'Failed to upload file. Please try again.'
+            if (!$path) {
+                \Log::error('File storage returned false', [
+                    'directory' => $directory,
+                    'filename' => $filename
+                ]);
+                throw new \Exception('File storage operation returned false');
+            }
+
+            $fullPath = $directory . '/' . $filename;
+            
+            if (!Storage::disk('public')->exists($fullPath)) {
+                \Log::error('File not found after upload', [
+                    'path' => $fullPath,
+                    'storage_root' => storage_path('app/public')
+                ]);
+                throw new \Exception('File tidak tersimpan dengan benar. Verifikasi gagal.');
+            }
+
+            \Log::info('File uploaded successfully', [
+                'path' => $fullPath,
+                'size_kb' => $fileSizeKB,
+                'original_name' => $file->getClientOriginalName()
             ]);
-        }
 
-        return $directory . '/' . $filename;
+            return $fullPath;
+        } catch (\Exception $e) {
+            \Log::error('File upload failed', [
+                'error' => $e->getMessage(),
+                'directory' => $directory,
+                'file' => $file->getClientOriginalName(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw new \Exception('Gagal mengunggah file: ' . $e->getMessage());
+        }
     }
 
     /**

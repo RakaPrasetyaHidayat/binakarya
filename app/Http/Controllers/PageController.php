@@ -10,6 +10,8 @@ class PageController extends Controller
     public function show($slug)
     {
         $page = Page::where('slug', $slug)->where('is_published', true)->firstOrFail();
-        return view('public.pages.show', compact('page'));
+        $builderBlocks = $page->hasBuilderBlocks() ? $page->content_blocks : [];
+
+        return view('public.pages.show', compact('page', 'builderBlocks'));
     }
 }

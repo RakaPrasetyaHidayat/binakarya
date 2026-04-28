@@ -145,26 +145,26 @@ Tentang Kami
         </div>
 
         @if($teamMembers->count())
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
                 @foreach($teamMembers as $member)
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm dark:shadow-lg border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg dark:hover:shadow-xl transition-all group">
-                        <div class="mb-5">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-10 shadow-sm dark:shadow-lg border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg dark:hover:shadow-xl transition-all group flex flex-col items-center">
+                        <div class="mb-6">
                             @if($member->photo)
                                 <img src="{{ asset('storage/' . $member->photo) }}" alt="{{ $member->name }}"
-                                     class="w-24 h-24 sm:w-28 sm:h-28 rounded-full mx-auto object-cover shadow-md border-4 border-primary-100 dark:border-primary-900/30 group-hover:border-primary-300 dark:group-hover:border-primary-700 transition-all">
+                                     class="w-32 h-32 sm:w-40 sm:h-40 rounded-full mx-auto object-cover shadow-md border-4 border-primary-100 dark:border-primary-900/30 group-hover:border-primary-300 dark:group-hover:border-primary-700 transition-all">
                             @else
-                                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full mx-auto bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-md border-4 border-primary-100 dark:border-primary-900/30">
-                                    <span class="text-white font-bold text-2xl sm:text-3xl">{{ substr($member->name, 0, 1) }}</span>
+                                <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full mx-auto bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-md border-4 border-primary-100 dark:border-primary-900/30">
+                                    <span class="text-white font-bold text-3xl sm:text-4xl">{{ substr($member->name, 0, 1) }}</span>
                                 </div>
                             @endif
                         </div>
-                        <h4 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition">
+                        <h4 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition animate-fade-in">
                             {{ $member->name }}
                         </h4>
-                        <p class="text-primary-600 dark:text-primary-400 text-sm font-medium mb-3">
+                        <p class="text-primary-600 dark:text-primary-400 text-base sm:text-lg font-medium mb-4">
                             {{ $member->position }}
                         </p>
-                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                        <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed flex-grow">
                             {{ $member->bio ?: 'Penjelasan anggota dapat ditambahkan oleh admin.' }}
                         </p>
                     </div>

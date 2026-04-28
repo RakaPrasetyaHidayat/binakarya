@@ -350,4 +350,99 @@ class PageControllerTest extends TestCase
         $this->assertNotEmpty($page->content);
         $this->assertStringNotContainsString('<script>', $page->content);
     }
+
+    public function test_admin_can_create_builder_mode_page(): void
+    {
+        $blocks = [
+            ['type' => 'hero', 'data' => ['title' => 'Hero Title', 'subtitle' => 'Hero Subtitle', 'background_image' => 'https://example.com/hero.jpg']],
+            ['type' => 'text', 'data' => ['content' => '<p>Builder text content</p>']],
+        ];
+
+        $response = $this->actingAs($this->admin)
+            ->post(route('admin.pages.store'), [
+                'title' => 'Builder Page',
+                'content_mode' => 'builder',
+                'content_blocks' => json_encode($blocks),
+                'is_published' => true,
+            ]);
+
+        $response->assertRedirect(route('admin.pages.index'));
+
+        $page = Page::where('title', 'Builder Page')->first();
+        $this->assertNotNull($page);
+        $this->assertEquals('builder', $page->content_mode);
+        $this->assertIsArray($page->content_blocks);
+        $this->assertSame('hero', $page->content_blocks[0]['type']);
+    }
+
+    public function test_builder_mode_rejects_invalid_block_type(): void
+    {
+        $blocks = [
+            ['type' => 'unknown', 'data' => ['content' => 'Bad block']],
+        ];
+
+        $response = $this->actingAs($this->admin)
+            ->from(route('admin.pages.create'))
+            ->post(route('admin.pages.store'), [
+                'title' => 'Invalid Builder Page',
+                'content_mode' => 'builder',
+                'content_blocks' => json_encode($blocks),
+            ]);
+
+        $response->assertRedirect(route('admin.pages.create'));
+        $response->assertSessionHasErrors('content_blocks');
+    }
+
+    public function test_public_page_renders_builder_blocks(): void
+    {
+        $page = Page::factory()->create([
+            'title' => 'Public Builder',
+            'slug' => 'public-builder',
+            'content_mode' => 'builder',
+            'content_blocks' => [
+                ['type' => 'hero', 'data' => ['title' => 'Hero Public', 'subtitle' => 'Sub Public']],
+                ['type' => 'cta', 'data' => ['title' => 'Join Us', 'description' => 'Start now', 'button_label' => 'Click', 'button_url' => 'https://example.com']],
+            ],
+            'is_published' => true,
+        ]);
+
+        $response = $this->get(route('pages.show', $page->slug));
+
+        $response->assertOk();
+        $response->assertSee('Hero Public');
+        $response->assertSee('Join Us');
+    }
+
+    public function test_public_page_fallbacks_to_classic_content(): void
+    {
+        $page = Page::factory()->create([
+            'title' => 'Classic Public',
+            'slug' => 'classic-public',
+            'content_mode' => 'classic',
+            'content' => '<p>Classic body content</p>',
+            'is_published' => true,
+        ]);
+
+        $response = $this->get(route('pages.show', $page->slug));
+
+        $response->assertOk();
+        $response->assertSee('Classic body content');
+    }
+
+    public function test_non_super_admin_cannot_save_custom_js(): void
+    {
+        $response = $this->actingAs($this->admin)
+            ->from(route('admin.pages.create'))
+            ->post(route('admin.pages.store'), [
+                'title' => 'Builder With JS',
+                'content_mode' => 'builder',
+                'content_blocks' => json_encode([
+                    ['type' => 'text', 'data' => ['content' => '<p>hello</p>']],
+                ]),
+                'custom_js' => 'console.log("blocked");',
+            ]);
+
+        $response->assertRedirect(route('admin.pages.create'));
+        $response->assertSessionHasErrors('custom_js');
+    }
 }

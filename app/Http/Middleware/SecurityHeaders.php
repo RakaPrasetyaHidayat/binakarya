@@ -9,6 +9,9 @@ class SecurityHeaders
 {
     public function handle(Request $request, Closure $next): mixed
     {
+        $nonce = base64_encode(random_bytes(16));
+        view()->share('cspNonce', $nonce);
+
         $response = $next($request);
         
         // Basic security headers
@@ -25,7 +28,7 @@ class SecurityHeaders
 
         // Content Security Policy (CSP)
         $csp = "default-src 'self'; ";
-        $csp .= "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com http://127.0.0.1:5173 localhost:5173; ";
+        $csp .= "script-src 'self' 'nonce-{$nonce}' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com http://127.0.0.1:5173 localhost:5173; ";
         $csp .= "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net http://127.0.0.1:5173 localhost:5173; ";
         $csp .= "img-src 'self' data: https://images.unsplash.com https://ui-avatars.com https://*.basecamp.com http://127.0.0.1:5173 localhost:5173; ";
         $csp .= "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net http://127.0.0.1:5173 localhost:5173; ";
