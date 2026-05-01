@@ -89,29 +89,36 @@
    PAGE HEADER — consistent across all public pages
    ============================================================ */
 .page-header {
-    @apply pt-20 sm:pt-24 lg:pt-28 pb-7 sm:pb-9 lg:pb-11
-           border-b transition-colors duration-300
-           bg-white border-gray-100
-           dark:bg-gray-800 dark:border-gray-700;
+    @apply pt-20 sm:pt-24 lg:pt-28 pb-10 sm:pb-12 lg:pb-14
+           relative overflow-hidden transition-colors duration-300;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+}
+
+.dark .page-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+}
+
+.page-header::before {
+    content: none;
 }
 
 .page-header-inner {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative;
 }
 
 .page-header-tagline {
-    @apply text-[11px] uppercase tracking-[0.2em] font-semibold mb-2 block transition-colors
-           text-gray-500 dark:text-gray-400;
+    @apply text-[11px] uppercase tracking-[0.25em] font-bold mb-3 block
+           text-blue-200;
 }
 
 .page-header-title {
-    @apply text-2xl sm:text-3xl lg:text-4xl font-bold mb-2.5 transition-colors leading-tight
-           text-gray-900 dark:text-white;
+    @apply text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 leading-tight
+           text-white;
 }
 
 .page-header-desc {
-    @apply text-sm sm:text-base leading-relaxed transition-colors
-           text-gray-600 dark:text-gray-300;
+    @apply text-sm sm:text-base leading-relaxed
+           text-blue-100;
 }
 
 /* ============================================================

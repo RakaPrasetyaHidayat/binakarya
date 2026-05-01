@@ -56,29 +56,29 @@ class AppServiceProvider extends ServiceProvider
         /**
          * Rate Limiting Configuration
          */
-        // Login: 30 attempts per minute (more generous)
+        // Login: max 5 attempts per minute per IP (brute force protection)
         RateLimiter::for('login', function (Request $request) {
-            return Limit::perMinute(30)->by($request->ip());
+            return Limit::perMinute(5)->by($request->ip());
         });
 
-        // Admin Dashboard: 30 requests per minute per authenticated user
+        // Admin Dashboard: 60 requests per minute per authenticated user
         RateLimiter::for('admin', function (Request $request) {
-            return Limit::perMinute(30)->by($request->user()?->id ?: $request->ip());
-        });
-
-        // Contact form: 5 submissions per hour per IP
-        RateLimiter::for('contact', function (Request $request) {
-            return Limit::perHour(5)->by($request->ip());
-        });
-
-        // API: 60 requests per minute (if needed)
-        RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
-        // Form submissions: 30 per hour to prevent spam
-        RateLimiter::for('form', function (Request $request) {
-            return Limit::perHour(30)->by($request->ip());
+        // Contact form: 3 submissions per hour per IP
+        RateLimiter::for('contact', function (Request $request) {
+            return Limit::perHour(3)->by($request->ip());
+        });
+
+        // Subscribe: 5 per hour per IP
+        RateLimiter::for('subscribe', function (Request $request) {
+            return Limit::perHour(5)->by($request->ip());
+        });
+
+        // API: 60 requests per minute
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
     }
 }

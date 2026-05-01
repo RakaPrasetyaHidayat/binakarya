@@ -88,7 +88,7 @@ function pageBuilderForm(initialMode, initialBlocksRaw) {
                 <input type="hidden" name="content_mode" :value="contentMode">
             </div>
 
-            <div x-show="contentMode === 'classic'" x-cloak>
+            <div x-show="contentMode === 'classic'">
                 <label class="block text-sm font-bold text-gray-700 dark:text-slate-300 mb-2">Konten Halaman <span class="text-red-500">*</span></label>
                 <textarea name="content" id="tinymce-content" class="@error('content') border-red-500 @enderror">{{ old('content', $page->content) }}</textarea>
                 @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -195,7 +195,9 @@ function pageBuilderForm(initialMode, initialBlocksRaw) {
         </div>
     </form>
 </div>
+@endsection
 
+@section('scripts')
 @include('admin.partials.tinymce-init', [
     'editors' => [
         ['selector' => '#tinymce-content', 'height' => 500, 'toolbar' => 'full'],

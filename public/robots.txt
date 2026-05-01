@@ -1,4 +1,24 @@
 User-agent: *
 Allow: /
+Disallow: /cendikiaByRidwanullah/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /storage/
+Disallow: /vendor/
 
+# Crawl delay untuk bots yang aggressive
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Sitemaps
 Sitemap: {{ url('/sitemap.xml') }}
+Sitemap: {{ url('/sitemap.php') }}
+Sitemap: {{ url('/sitemaps/pages.xml') }}
+Sitemap: {{ url('/sitemaps/books.xml') }}
+Sitemap: {{ url('/sitemaps/blog.xml') }}
+Sitemap: {{ url('/sitemaps/services.xml') }}
+Sitemap: {{ url('/sitemaps/news.xml') }}

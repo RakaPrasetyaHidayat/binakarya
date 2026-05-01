@@ -2,7 +2,7 @@
     Shared TinyMCE dark-mode CSS — include via @include('admin.partials.tinymce-styles')
     inside @section('styles') of any admin form that uses TinyMCE.
 --}}
-<style>
+<style nonce="{{ $cspNonce ?? '' }}">
 .tox-tinymce { border-radius: 0.5rem !important; }
 html.dark .tox,
 html.dark .tox-editor-header,

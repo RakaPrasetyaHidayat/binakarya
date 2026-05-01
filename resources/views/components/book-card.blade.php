@@ -3,7 +3,7 @@
 <article class="w-full bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 border border-gray-200 dark:border-gray-700 flex flex-col h-full group" style="min-width:0;">
 
     {{-- Cover --}}
-    <div class="relative overflow-hidden w-full bg-gray-100 dark:bg-gray-700 aspect-[3/4] flex-shrink-0">
+    <div class="relative overflow-hidden w-full bg-gray-100 dark:bg-gray-700 aspect-[4/5] flex-shrink-0">
         @if($book->cover_url)
             <img src="{{ $book->cover_url }}" alt="{{ $book->title }}"
                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500"

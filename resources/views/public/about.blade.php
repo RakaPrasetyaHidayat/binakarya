@@ -11,11 +11,17 @@ Tentang Kami
 @section('content')
 {{-- Page Header — konsisten dengan halaman lain --}}
 <div class="page-header">
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+        <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <defs><pattern id="grid-about" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs>
+            <rect width="100" height="100" fill="url(#grid-about)"/>
+        </svg>
+    </div>
     <div class="page-header-inner">
         <span class="page-header-tagline">Tentang Kami</span>
-        <h1 class="page-header-title">Bina Karya <span class="text-primary-600">Cendekia</span></h1>
+        <h1 class="page-header-title">Bina Karya <span class="text-yellow-300">Cendekia</span></h1>
         <p class="page-header-desc max-w-2xl">
-            {{ $siteSettings->get('about_profile', 'Lembaga penerbitan dan pengembangan ilmu pengetahuan yang berdedikasi untuk memajukan literasi dan penelitian di Indonesia.') }}
+            {!! strip_tags($siteSettings->get('about_profile', 'Lembaga penerbitan dan pengembangan ilmu pengetahuan yang berdedikasi untuk memajukan literasi dan penelitian di Indonesia.')) !!}
         </p>
     </div>
 </div>
@@ -141,28 +147,51 @@ Tentang Kami
         </div>
 
         @if($teamMembers->count())
-            <div class="grid grid-cols-2 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 @foreach($teamMembers as $member)
-                    <div class="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700 text-center hover:shadow-md transition-all group flex flex-col items-center">
-                        <div class="mb-3 sm:mb-5">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 sm:p-6 shadow-sm border border-gray-100 dark:border-gray-700 text-center hover:shadow-md transition-all group flex flex-col items-center">
+                        {{-- Avatar --}}
+                        <div class="mb-4">
                             @if($member->photo)
                                 <img src="{{ asset('storage/' . $member->photo) }}" alt="{{ $member->name }}"
-                                     class="w-16 h-16 sm:w-32 sm:h-32 rounded-full mx-auto object-cover shadow-md border-2 sm:border-4 border-primary-100 dark:border-primary-900/30 group-hover:border-primary-300 transition-all">
+                                     class="w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto object-cover shadow-md border-4 border-primary-100 dark:border-primary-900/30 group-hover:border-primary-300 transition-all">
                             @else
-                                <div class="w-16 h-16 sm:w-32 sm:h-32 rounded-full mx-auto bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-md border-2 sm:border-4 border-primary-100 dark:border-primary-900/30">
-                                    <span class="text-white font-bold text-xl sm:text-3xl">{{ substr($member->name, 0, 1) }}</span>
+                                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full mx-auto bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-md border-4 border-primary-100 dark:border-primary-900/30">
+                                    <span class="text-white font-bold text-2xl sm:text-3xl">{{ substr($member->name, 0, 1) }}</span>
                                 </div>
                             @endif
                         </div>
-                        <h4 class="text-sm sm:text-xl font-bold text-gray-900 dark:text-white mb-1 sm:mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition leading-tight">
+                        {{-- Info --}}
+                        <h4 class="text-sm sm:text-base font-bold text-gray-900 dark:text-white mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition leading-tight">
                             {{ $member->name }}
                         </h4>
-                        <p class="text-primary-600 dark:text-primary-400 text-xs sm:text-base font-medium mb-2 sm:mb-3">
+                        <p class="text-primary-600 dark:text-primary-400 text-xs sm:text-sm font-semibold mb-2">
                             {{ $member->position }}
                         </p>
-                        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 leading-relaxed flex-grow line-clamp-3 sm:line-clamp-none">
-                            {{ $member->bio ?: 'Penjelasan anggota dapat ditambahkan oleh admin.' }}
+                        @if($member->bio)
+                        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-3">
+                            {{ $member->bio }}
                         </p>
+                        @endif
+                        {{-- Social links --}}
+                        @if($member->linkedin || $member->email)
+                        <div class="flex items-center gap-2 mt-3">
+                            @if($member->linkedin)
+                            <a href="{{ $member->linkedin }}" target="_blank" rel="noopener"
+                               class="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
+                               :class="darkMode?'bg-slate-700 hover:bg-blue-600':'bg-gray-100 hover:bg-blue-600 hover:text-white'">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                            </a>
+                            @endif
+                            @if($member->email)
+                            <a href="mailto:{{ $member->email }}"
+                               class="w-7 h-7 rounded-lg flex items-center justify-center transition-colors"
+                               :class="darkMode?'bg-slate-700 hover:bg-primary-600':'bg-gray-100 hover:bg-primary-600 hover:text-white'">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </a>
+                            @endif
+                        </div>
+                        @endif
                     </div>
                 @endforeach
             </div>

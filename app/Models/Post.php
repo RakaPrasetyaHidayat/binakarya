@@ -64,7 +64,8 @@ class Post extends Model
         return Post::where('category_id', $this->category_id)
             ->where('id', '!=', $this->id)
             ->published()
-            ->latest()
+            ->with(['user', 'category'])
+            ->latest('published_at')
             ->limit($limit)
             ->get();
     }

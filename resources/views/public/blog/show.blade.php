@@ -223,45 +223,116 @@
                     </div>
 
                     {{-- Related Articles --}}
-                    @if($relatedPosts && $relatedPosts->count() > 0)
+                    @php
+                        // Jika tidak ada post sekategori, fallback ke post terbaru lainnya
+                        $displayRelated = ($relatedPosts && $relatedPosts->count() > 0)
+                            ? $relatedPosts
+                            : \App\Models\Post::published()
+                                ->where('id', '!=', $post->id)
+                                ->with(['user', 'category'])
+                                ->latest('published_at')
+                                ->limit(3)
+                                ->get();
+
+                        $relatedLabel = ($relatedPosts && $relatedPosts->count() > 0)
+                            ? 'Artikel Terkait' . ($post->category ? ' — ' . $post->category->name : '')
+                            : 'Artikel Lainnya';
+                    @endphp
+
+                    @if($displayRelated && $displayRelated->count() > 0)
                     <section class="mt-12 pt-8 border-t transition-colors duration-300"
                         :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
-                        <h2 class="text-xl font-bold mb-6 transition-colors duration-300"
-                            :class="darkMode ? 'text-white' : 'text-gray-900'">📚 Artikel Terkait</h2>
-                        <div class="space-y-4">
-                            @foreach($relatedPosts as $relatedPost)
-                            <article class="flex gap-4 p-4 rounded-xl border transition-all duration-300 hover:shadow-md"
-                                :class="darkMode ? 'border-gray-700 hover:border-gray-600 bg-slate-800/30' : 'border-gray-200 hover:border-gray-300 bg-white'">
-                                @if($relatedPost->featured_image_url)
-                                    <img src="{{ $relatedPost->featured_image_url }}" alt="{{ $relatedPost->title }}"
-                                        class="w-24 h-20 object-cover rounded-lg flex-shrink-0">
-                                @else
-                                    <div class="w-24 h-20 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
-                                        :class="darkMode ? 'bg-slate-700' : 'bg-gray-100'">
-                                        <span class="text-2xl">📖</span>
-                                    </div>
-                                @endif
-                                <div class="flex-1 min-w-0">
-                                    <div class="text-xs transition-colors duration-300 mb-1"
-                                        :class="darkMode ? 'text-gray-500' : 'text-gray-500'">
-                                        {{ $relatedPost->published_at?->format('d F Y') }}
-                                    </div>
-                                    <h3 class="font-semibold line-clamp-2 transition-colors duration-300"
+
+                        {{-- Section Header --}}
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center gap-3">
+                                <div class="w-1 h-6 bg-primary-600 rounded-full"></div>
+                                <h2 class="text-xl font-bold transition-colors duration-300"
+                                    :class="darkMode ? 'text-white' : 'text-gray-900'">
+                                    {{ $relatedLabel }}
+                                </h2>
+                            </div>
+                            <a href="{{ $post->category ? route('blog.index', ['category' => $post->category_id]) : route('blog.index') }}"
+                               class="text-sm font-medium flex items-center gap-1 transition-colors"
+                               :class="darkMode ? 'text-primary-400 hover:text-primary-300' : 'text-primary-600 hover:text-primary-700'">
+                                Lihat Semua
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                        {{-- Cards Grid --}}
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            @foreach($displayRelated as $relatedPost)
+                            <article class="group rounded-xl border overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+                                :class="darkMode ? 'border-slate-700 bg-slate-800/50 hover:border-slate-600' : 'border-gray-200 bg-white hover:border-gray-300'">
+
+                                {{-- Thumbnail --}}
+                                <a href="{{ route('blog.show', $relatedPost->slug) }}" class="block aspect-[16/9] overflow-hidden relative">
+                                    @if($relatedPost->featured_image_url)
+                                        <img src="{{ $relatedPost->featured_image_url }}"
+                                             alt="{{ $relatedPost->title }}"
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center transition-colors duration-300"
+                                            :class="darkMode ? 'bg-slate-700' : 'bg-gradient-to-br from-primary-50 to-blue-50'">
+                                            <svg class="w-10 h-10 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                                :class="darkMode ? 'text-slate-500' : 'text-primary-200'">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M13 2v6h6M9 13h6M9 17h4"/>
+                                            </svg>
+                                        </div>
+                                    @endif
+
+                                    {{-- Category badge --}}
+                                    @if($relatedPost->category)
+                                    <span class="absolute top-2 left-2 text-[10px] font-semibold px-2 py-0.5 rounded-full backdrop-blur-sm"
+                                        :class="darkMode ? 'bg-slate-900/70 text-primary-300' : 'bg-white/80 text-primary-700'">
+                                        {{ $relatedPost->category->name }}
+                                    </span>
+                                    @endif
+                                </a>
+
+                                {{-- Content --}}
+                                <div class="p-4">
+                                    <p class="text-xs mb-2 transition-colors"
+                                        :class="darkMode ? 'text-gray-500' : 'text-gray-400'">
+                                        {{ $relatedPost->published_at?->format('d M Y') }}
+                                        <span class="mx-1">·</span>
+                                        {{ ceil(str_word_count(strip_tags($relatedPost->body ?? '')) / 200) }} menit baca
+                                    </p>
+
+                                    <h3 class="font-semibold text-sm leading-snug line-clamp-2 mb-2 transition-colors duration-300"
                                         :class="darkMode ? 'text-white' : 'text-gray-900'">
                                         <a href="{{ route('blog.show', $relatedPost->slug) }}"
-                                           class="transition-colors"
+                                           class="transition-colors group-hover:underline decoration-primary-500 underline-offset-2"
                                            :class="darkMode ? 'hover:text-primary-400' : 'hover:text-primary-600'">
                                             {{ $relatedPost->title }}
                                         </a>
                                     </h3>
-                                    <p class="text-sm line-clamp-2 mt-1 transition-colors duration-300"
-                                        :class="darkMode ? 'text-gray-400' : 'text-gray-600'">
+
+                                    @if($relatedPost->excerpt)
+                                    <p class="text-xs line-clamp-2 transition-colors"
+                                        :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
                                         {{ $relatedPost->excerpt }}
                                     </p>
+                                    @endif
+
+                                    <a href="{{ route('blog.show', $relatedPost->slug) }}"
+                                       class="inline-flex items-center gap-1 text-xs font-semibold mt-3 transition-colors"
+                                       :class="darkMode ? 'text-primary-400 hover:text-primary-300' : 'text-primary-600 hover:text-primary-700'">
+                                        Baca Selengkapnya
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </a>
                                 </div>
+
                             </article>
                             @endforeach
                         </div>
+
                     </section>
                     @endif
 
@@ -270,24 +341,6 @@
                 {{-- Sidebar --}}
                 <aside class="lg:col-span-1">
                     <div class="lg:sticky lg:top-28 space-y-6">
-
-                        {{-- Author Card --}}
-                        <div class="p-5 rounded-xl border transition-colors duration-300"
-                            :class="darkMode ? 'bg-slate-800/50 border-slate-700' : 'bg-white border-gray-200'">
-                            <h3 class="text-sm font-bold uppercase tracking-wider mb-4 transition-colors"
-                                :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Penulis</h3>
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold text-lg">
-                                    {{ strtoupper(substr($post->user->name, 0, 1)) }}
-                                </div>
-                                <div>
-                                    <p class="font-semibold text-sm transition-colors"
-                                        :class="darkMode ? 'text-white' : 'text-gray-900'">{{ $post->user->name }}</p>
-                                    <p class="text-xs transition-colors"
-                                        :class="darkMode ? 'text-gray-400' : 'text-gray-500'">Kontributor</p>
-                                </div>
-                            </div>
-                        </div>
 
                         {{-- Categories --}}
                         @if($post->category)
@@ -335,7 +388,8 @@
                         <div class="p-5 rounded-xl bg-primary-600 text-white">
                             <h3 class="text-sm font-bold uppercase tracking-wider mb-2">Butuh Bantuan?</h3>
                             <p class="text-sm text-primary-100 mb-4">Konsultasikan kebutuhan publikasi Anda dengan tim kami.</p>
-                            <a href="{{ route('contact') }}"
+                            <a href="https://wa.me/62895611314372?text=Halo,%20saya%20ingin%20konsultasi%20gratis"
+                               target="_blank" rel="noopener"
                                class="block w-full py-2.5 rounded-lg bg-white text-primary-600 text-sm font-semibold text-center hover:bg-primary-50 transition">
                                 Hubungi Kami
                             </a>

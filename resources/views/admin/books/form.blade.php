@@ -128,10 +128,12 @@
         </div>
     </form>
 </div>
+@endsection
 
+@section('scripts')
 @include('admin.partials.tinymce-init', [
     'editors' => [
-        ['selector' => '#abstract-editor', 'height' => 320, 'toolbar' => 'minimal'],
+        ['selector' => '#abstract-editor', 'height' => 400, 'toolbar' => 'full'],
     ]
 ])
 @endsection

@@ -1,0 +1,3 @@
+Contact: mailto:bkcpublishing@gmail.com
+Preferred-Languages: id, en
+Policy: Harap laporkan kerentanan keamanan melalui email di atas.

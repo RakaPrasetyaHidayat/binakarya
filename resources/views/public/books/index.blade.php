@@ -11,6 +11,12 @@
     
     {{-- Page Header --}}
     <div class="page-header">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs><pattern id="grid-books" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs>
+                <rect width="100" height="100" fill="url(#grid-books)"/>
+            </svg>
+        </div>
         <div class="page-header-inner">
             <div class="max-w-2xl">
                 <h1 class="page-header-title">Katalog Buku</h1>

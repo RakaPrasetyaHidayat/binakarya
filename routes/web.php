@@ -9,6 +9,7 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,10 @@ Route::get('/p/{slug}', [App\Http\Controllers\PageController::class, 'show'])->n
 Route::post('/kontak', [ContactController::class, 'store'])->name('contact.store')
     ->middleware('throttle:contact');
 
+// Subscribe newsletter
+Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe')
+    ->middleware('throttle:subscribe');
+
 // Privacy & Terms
 Route::get('/kebijakan-privasi', function () {
     return view('public.privacy');
@@ -40,6 +45,7 @@ Route::get('/pdf/{filename}', [PdfController::class, 'show'])->name('pdf.show')-
 
 // Sitemap & Robots
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/sitemap-index.xml', [SitemapController::class, 'sitemapIndex'])->name('sitemap.index');
 Route::get('/sitemaps/pages.xml', [SitemapController::class, 'pages'])->name('sitemap.pages');
 Route::get('/sitemaps/books.xml', [SitemapController::class, 'books'])->name('sitemap.books');
 Route::get('/sitemaps/blog.xml', [SitemapController::class, 'blog'])->name('sitemap.blog');
@@ -95,6 +101,11 @@ Route::prefix('cendikiaByRidwanullah')->name('admin.')->middleware(['auth', 'thr
     Route::post('scholar-settings/sync', [Admin\ScholarSettingController::class, 'sync'])->name('scholar-settings.sync')->middleware('role:admin');
 
     // Audit Logs (Admin only)
+    // Subscribers
+    Route::get('subscribers', [Admin\SubscriberController::class, 'index'])->name('subscribers.index')->middleware('role:admin');
+    Route::delete('subscribers/{subscriber}', [Admin\SubscriberController::class, 'destroy'])->name('subscribers.destroy')->middleware('role:admin');
+    Route::post('subscribers/broadcast', [Admin\SubscriberController::class, 'broadcast'])->name('subscribers.broadcast')->middleware('role:admin');
+
     Route::get('audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit-logs.index')->middleware('role:admin');
     Route::get('audit-logs/{auditLog}', [Admin\AuditLogController::class, 'show'])->name('audit-logs.show')->middleware('role:admin');
 

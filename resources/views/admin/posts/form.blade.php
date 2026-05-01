@@ -178,7 +178,9 @@
         </div>
     </form>
 </div>
+@endsection
 
+@section('scripts')
 @include('admin.partials.tinymce-init', [
     'editors' => [
         ['selector' => '#body-editor', 'height' => 550, 'toolbar' => 'full'],

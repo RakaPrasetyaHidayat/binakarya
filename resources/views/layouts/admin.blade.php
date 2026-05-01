@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') - Admin Panel</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @yield('styles')
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script nonce="{{ $cspNonce ?? '' }}">
@@ -46,6 +47,7 @@
                     ['route' => 'admin.menus.index', 'label' => 'Menu Navigasi', 'icon' => 'menu-outline', 'roles' => ['admin']],
                     ['route' => 'admin.menu-builder.index', 'label' => 'Menu Builder', 'icon' => 'construct-outline', 'roles' => ['admin']],
                     ['route' => 'admin.contacts.index', 'label' => 'Pesan Masuk', 'icon' => 'mail-outline', 'roles' => ['admin']],
+                    ['route' => 'admin.subscribers.index', 'label' => 'Subscriber', 'icon' => 'people-outline', 'roles' => ['admin']],
                 ];
 
                 $userRole = auth()->user()->role;

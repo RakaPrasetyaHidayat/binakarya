@@ -101,12 +101,17 @@ class SettingController extends Controller
         ];
 
         $htmlFields = [
-            'site_description', 'hero_description', 'about_profile',
             'about_content_1', 'about_content_2', 'about_vision', 'about_mission',
-            'footer_text', 'benefit_1_desc', 'benefit_2_desc',
+            'benefit_1_desc', 'benefit_2_desc',
+            'contact_map_embed',
+        ];
+
+        // Field plain text — strip semua HTML tag sebelum disimpan
+        $plainTextFields = [
+            'site_description', 'hero_description', 'about_profile',
+            'footer_text',
             'services_header_description', 'books_header_description', 'blog_header_description',
             'contact_header_description', 'contact_form_description', 'contact_cta_description',
-            'contact_map_embed',
         ];
 
         $checkboxFields = [
@@ -124,6 +129,8 @@ class SettingController extends Controller
                 $value = $request->input($field);
                 if (in_array($field, $htmlFields)) {
                     $value = clean($value);
+                } elseif (in_array($field, $plainTextFields)) {
+                    $value = strip_tags($value ?? '');
                 }
                 Setting::set($field, $value ?? '');
             }

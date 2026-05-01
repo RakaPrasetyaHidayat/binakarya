@@ -1,0 +1,59 @@
+<?php
+/**
+ * Sitemap Index for Google Search Console
+ * This file lists all available sitemaps
+ */
+
+header('Content-Type: application/xml; charset=utf-8');
+header('Cache-Control: public, max-age=86400');
+header('X-Robots-Tag: index, follow');
+
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+$baseUrl = $protocol . $_SERVER['HTTP_HOST'];
+
+echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+// List of all sitemaps
+$sitemaps = [
+    [
+        'loc' => $baseUrl . '/sitemap.php',
+        'lastmod' => date('c'),
+        'description' => 'Main dynamic sitemap with all content'
+    ],
+    [
+        'loc' => $baseUrl . '/sitemaps/pages.xml',
+        'lastmod' => date('c'),
+        'description' => 'Static pages sitemap'
+    ],
+    [
+        'loc' => $baseUrl . '/sitemaps/books.xml',
+        'lastmod' => date('c'),
+        'description' => 'Books and publications sitemap'
+    ],
+    [
+        'loc' => $baseUrl . '/sitemaps/blog.xml',
+        'lastmod' => date('c'),
+        'description' => 'Blog posts sitemap'
+    ],
+    [
+        'loc' => $baseUrl . '/sitemaps/services.xml',
+        'lastmod' => date('c'),
+        'description' => 'Services sitemap'
+    ],
+    [
+        'loc' => $baseUrl . '/sitemaps/news.xml',
+        'lastmod' => date('c'),
+        'description' => 'News and recent posts sitemap'
+    ],
+];
+
+foreach ($sitemaps as $sitemap) {
+    echo "  <sitemap>\n";
+    echo "    <loc>" . htmlspecialchars($sitemap['loc'], ENT_XML1, 'UTF-8') . "</loc>\n";
+    echo "    <lastmod>" . $sitemap['lastmod'] . "</lastmod>\n";
+    echo "  </sitemap>\n";
+}
+
+echo "</sitemapindex>\n";
+?>

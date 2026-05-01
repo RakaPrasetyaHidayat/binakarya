@@ -13,6 +13,12 @@
 
     {{-- Page Header --}}
     <div class="page-header">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs><pattern id="grid-services" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs>
+                <rect width="100" height="100" fill="url(#grid-services)"/>
+            </svg>
+        </div>
         <div class="page-header-inner">
             <span class="page-header-tagline">{{ $siteSettings->get('services_header_tagline', 'Layanan Kami') }}</span>
             <h1 class="page-header-title">{{ $siteSettings->get('services_header_title', 'Solusi dan Layanan') }}</h1>

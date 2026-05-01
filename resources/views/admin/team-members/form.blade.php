@@ -104,7 +104,9 @@
         </div>
     </form>
 </div>
+@endsection
 
+@section('scripts')
 @include('admin.partials.tinymce-init', [
     'editors' => [
         ['selector' => '#bio-editor', 'height' => 280, 'toolbar' => 'minimal'],

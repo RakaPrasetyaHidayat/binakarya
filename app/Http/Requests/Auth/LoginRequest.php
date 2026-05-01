@@ -6,11 +6,9 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use App\Models\User;
 
 class LoginRequest extends FormRequest
 {
@@ -45,32 +43,12 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         $credentials = $this->only('email', 'password');
-        $authenticated = false;
 
-        // Try standard Bcrypt auth first, catching RuntimeException
-        // from non-bcrypt hashes (e.g. legacy MD5 passwords)
-        try {
-            $authenticated = Auth::attempt($credentials, $this->boolean('remember'));
-        } catch (\RuntimeException $e) {
-            // Password hash is not bcrypt — fall through to MD5 fallback
-            $authenticated = false;
-        }
-
-        if (! $authenticated) {
-            // Try MD5 hash as fallback for legacy accounts
-            $user = User::where('email', $credentials['email'])->first();
-
-            if ($user && md5($credentials['password']) === $user->password) {
-                // MD5 match — upgrade to Bcrypt and login
-                $user->password = Hash::make($credentials['password']);
-                $user->save();
-                Auth::login($user, $this->boolean('remember'));
-            } else {
-                RateLimiter::hit($this->throttleKey());
-                throw ValidationException::withMessages([
-                    'email' => trans('auth.failed'),
-                ]);
-            }
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
         }
 
         RateLimiter::clear($this->throttleKey());

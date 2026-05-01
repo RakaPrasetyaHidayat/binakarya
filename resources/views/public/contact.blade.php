@@ -7,6 +7,12 @@
 
     {{-- Page Header --}}
     <div class="page-header">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs><pattern id="grid-contact" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs>
+                <rect width="100" height="100" fill="url(#grid-contact)"/>
+            </svg>
+        </div>
         <div class="page-header-inner">
             <span class="page-header-tagline">{{ $siteSettings->get('contact_header_tagline', 'Hubungi Kami') }}</span>
             <h1 class="page-header-title">{{ $siteSettings->get('contact_header_title', 'Kontak') }}</h1>
@@ -33,6 +39,10 @@
 
                 <form method="POST" action="{{ route('contact.store') }}">
                     @csrf
+                    {{-- Honeypot: hidden field, bot akan mengisi ini, manusia tidak --}}
+                    <div style="display:none;" aria-hidden="true">
+                        <input type="text" name="website" value="" tabindex="-1" autocomplete="off">
+                    </div>
                     <div class="space-y-5">
                         <div>
                             <label class="block text-sm font-semibold text-gray-900 dark:text-gray-200 mb-2 transition-colors">Nama <span class="text-red-500">*</span></label>

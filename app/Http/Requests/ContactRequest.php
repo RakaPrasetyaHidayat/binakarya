@@ -15,6 +15,14 @@ class ContactRequest extends FormRequest
             'email'   => 'required|email|max:150',
             'subject' => 'nullable|string|max:200',
             'message' => 'required|string|min:10|max:2000',
+            'website' => 'max:0', // honeypot — harus kosong, bot biasanya mengisi ini
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'website.max' => 'Pengiriman ditolak.',
         ];
     }
 }

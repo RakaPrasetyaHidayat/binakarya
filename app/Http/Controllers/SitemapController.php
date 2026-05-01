@@ -21,6 +21,14 @@ class SitemapController extends Controller
             ->header('X-Robots-Tag', 'index, follow');
     }
 
+    public function sitemapIndex()
+    {
+        return response()->view('sitemaps.sitemap-index')
+            ->header('Content-Type', 'application/xml; charset=utf-8')
+            ->header('Cache-Control', 'public, max-age=86400')
+            ->header('X-Robots-Tag', 'index, follow');
+    }
+
     public function pages()
     {
         return response()->view('sitemaps.pages', ['lastStaticUpdate' => self::LAST_STATIC_UPDATE])

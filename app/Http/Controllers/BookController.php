@@ -25,7 +25,7 @@ class BookController extends Controller
             $query->where('category_id', $categoryId);
         }
 
-        $books = $query->latest()->paginate(9)->withQueryString();
+        $books = $query->latest()->paginate(8)->withQueryString();
         $categories = Category::where('type', 'book')->withCount([
             'books' => function ($query) {
                 $query->where('is_published', true);

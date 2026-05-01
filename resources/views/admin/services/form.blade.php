@@ -341,3 +341,11 @@ document.addEventListener('DOMContentLoaded', function() {
 #icon-picker-content button:hover { transform: scale(1.2); }
 </style>
 @endsection
+
+@section('scripts')
+@include('admin.partials.tinymce-init', [
+    'editors' => [
+        ['selector' => '#body-editor', 'height' => 500, 'toolbar' => 'full'],
+    ]
+])
+@endsection

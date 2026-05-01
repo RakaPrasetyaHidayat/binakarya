@@ -26,8 +26,8 @@ class BlogController extends Controller
             $query->where('category_id', $categoryId);
         }
 
-        // Pagination: 6 articles per page
-        $posts = $query->latest('published_at')->paginate(6)->withQueryString();
+        // Pagination: 8 articles per page
+        $posts = $query->latest('published_at')->paginate(8)->withQueryString();
         $categories = Category::where('type', 'blog')->get();
 
         return view('public.blog.index', compact('posts', 'categories'));

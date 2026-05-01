@@ -3,31 +3,57 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-soft border border-gray-100 dark:border-slate-800 hover:shadow-soft-lg transition-all duration-300 group">
         <div class="flex items-center justify-between gap-4">
             <div class="min-w-0">
                 <p class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest mb-1">Total Buku</p>
                 <p class="text-3xl sm:text-4xl font-black text-primary-600 dark:text-primary-500 tracking-tight">{{ $stats['books'] }}</p>
             </div>
+            <div class="w-12 h-12 rounded-2xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+                <ion-icon name="book-outline" class="text-2xl text-primary-600 dark:text-primary-400"></ion-icon>
+            </div>
         </div>
     </div>
+
     <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-soft border border-gray-100 dark:border-slate-800 hover:shadow-soft-lg transition-all duration-300 group">
         <div class="flex items-center justify-between gap-4">
             <div class="min-w-0">
                 <p class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest mb-1">Total Artikel</p>
                 <p class="text-3xl sm:text-4xl font-black text-accent-600 dark:text-accent-500 tracking-tight">{{ $stats['posts'] }}</p>
             </div>
+            <div class="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                <ion-icon name="newspaper-outline" class="text-2xl text-green-600 dark:text-green-400"></ion-icon>
+            </div>
         </div>
     </div>
+
     <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-soft border border-gray-100 dark:border-slate-800 hover:shadow-soft-lg transition-all duration-300 group">
         <div class="flex items-center justify-between gap-4">
             <div class="min-w-0">
                 <p class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest mb-1">Pesan Baru</p>
                 <p class="text-3xl sm:text-4xl font-black text-orange-500 dark:text-orange-400 tracking-tight">{{ $stats['contacts'] }}</p>
             </div>
+            <div class="w-12 h-12 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
+                <ion-icon name="mail-outline" class="text-2xl text-orange-500 dark:text-orange-400"></ion-icon>
+            </div>
         </div>
     </div>
+
+    @if(auth()->user()->isAdmin())
+    <a href="{{ route('admin.subscribers.index') }}"
+       class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-soft border border-gray-100 dark:border-slate-800 hover:shadow-soft-lg hover:border-primary-200 dark:hover:border-primary-800 transition-all duration-300 group block">
+        <div class="flex items-center justify-between gap-4">
+            <div class="min-w-0">
+                <p class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest mb-1">Subscriber</p>
+                <p class="text-3xl sm:text-4xl font-black text-purple-600 dark:text-purple-400 tracking-tight">{{ $stats['subscribers'] }}</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0">
+                <ion-icon name="people-outline" class="text-2xl text-purple-600 dark:text-purple-400"></ion-icon>
+            </div>
+        </div>
+    </a>
+    @endif
 </div>
 
 <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-soft border border-gray-100 dark:border-slate-800 transition-colors duration-300">

@@ -193,7 +193,9 @@ function pageBuilderForm(initialMode, initialBlocksRaw) {
         </div>
     </form>
 </div>
+@endsection
 
+@section('scripts')
 @include('admin.partials.tinymce-init', [
     'editors' => [
         ['selector' => '#tinymce-content', 'height' => 500, 'toolbar' => 'full'],
